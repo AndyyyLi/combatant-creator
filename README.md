@@ -33,3 +33,10 @@ I love the concept of personalizing in game characters because they feel more un
 feature that is present in every game I've played, from choosing cosmetics and weapons in Team Fortress 2 
 to picking my favourite character skin in League of Legends, thus I would be very interested in creating a
 character designing application myself!
+
+## User Stories
+
+- As a user, I want to be able to pick and add an item to my character
+- As a user, I want to be able to switch an item on my character to another item of the same category
+- As a user, I want to be able to see what my character has equipped so far
+- As a user, I want to be able to select an item to learn more about it (i.e. its description and stat bonuses)
