@@ -30,5 +30,6 @@ public class SpellTest {
     @Test
     public void testPickElement() {
         testSpell.pickElement("Ground");
+        assertEquals("Ground", testSpell.getElement());
     }
 }

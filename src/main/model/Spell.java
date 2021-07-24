@@ -25,7 +25,7 @@ public class Spell extends Item {
     // MODIFIES: this
     // EFFECTS: sets element to given element, even if they are the same
     public void pickElement(String element) {
-
+        this.element = element;
     }
 
 }

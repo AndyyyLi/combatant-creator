@@ -27,7 +27,7 @@ public class CategoryTest {
         listOfSomeItems.add(item2);
         listOfSomeItems.add(item3);
 
-        testItemList = new ArmourList();
+        testItemList = new Category();
         testItemList.setItemList(listOfSomeItems);
     }
 

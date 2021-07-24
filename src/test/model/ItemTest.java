@@ -40,6 +40,7 @@ public class ItemTest {
         assertEquals(spellDmg, testItem.getItemSpellDamage());
         assertEquals(defense, testItem.getItemDefense());
         assertEquals(speed, testItem.getItemSpeed());
+        assertEquals(0, testItem.getExtremifyCount());
     }
 
     @Test
@@ -53,7 +54,7 @@ public class ItemTest {
     }
 
     @Test
-    public void testExtremifyItemAllPositive() {
+    public void testExtremifyItem() {
         testItem.extremifyItem();
 
         assertEquals(health * 2, testItem.getItemHealth());
@@ -62,6 +63,22 @@ public class ItemTest {
         assertEquals(spellDmg * 2, testItem.getItemSpellDamage());
         assertEquals(defense * 2, testItem.getItemDefense());
         assertEquals(speed * 2, testItem.getItemSpeed());
+        assertEquals(1, testItem.getExtremifyCount());
+    }
+
+    @Test
+    public void testSimplifyItem() {
+        testItem.extremifyItem();
+        testItem.extremifyItem();
+        testItem.revertItem();
+
+        assertEquals(health, testItem.getItemHealth());
+        assertEquals(energy, testItem.getItemEnergy());
+        assertEquals(weapDmg, testItem.getItemWeaponDamage());
+        assertEquals(spellDmg, testItem.getItemSpellDamage());
+        assertEquals(defense, testItem.getItemDefense());
+        assertEquals(speed, testItem.getItemSpeed());
+        assertEquals(0, testItem.getExtremifyCount());
     }
 
 }

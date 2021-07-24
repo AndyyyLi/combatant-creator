@@ -34,14 +34,14 @@ public class Armour extends Item {
     // MODIFIES: this
     // EFFECTS: changes armour's material to given material, even if they are the same
     public void changeMaterial(String material) {
-
+        this.material = material;
     }
 
     // REQUIRES: ability name is one of: None, Rapid Regen, Shockback, Nimble Rush
     // MODIFIES: this
     // EFFECTS: changes armour's defensive ability to given ability, even if they are the same
     public void changeDefensiveAbility(String defensiveAbility) {
-
+        this.defensiveAbility = defensiveAbility;
     }
 
 }

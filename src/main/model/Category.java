@@ -3,8 +3,7 @@ package model;
 import java.util.List;
 
 /**
- * Category superclass covers the basic functionality of every type of items list, and declares every list to be
- * exactly three items long.
+ * Category superclass covers the basic functionality of lists of every type of item
  */
 
 public class Category {
@@ -20,7 +19,7 @@ public class Category {
         return itemList;
     }
 
-    // REQUIRES: position must be 1, 2, or 3
+    // REQUIRES: position must be between 1 and the size of item list (inclusive)
     // EFFECTS: returns item at given position in given category
     public Item selectItem(int position) {
         return null;

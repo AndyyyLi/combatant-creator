@@ -35,14 +35,14 @@ public class Weapon extends Item {
     // MODIFIES: this
     // EFFECTS: changes hit effect to given effect, even if they are the same
     public void applyHitEffect(String hitEffect) {
-
+        this.hitEffect = hitEffect;
     }
 
     // REQUIRES: effect intensity is in range [0,5]
     // MODIFIES: this
     // EFFECTS: sets effect intensity to given number, even if they are the same
     public void setEffectIntensity(int effectIntensity) {
-
+        this.effectIntensity = effectIntensity;
     }
 
 }

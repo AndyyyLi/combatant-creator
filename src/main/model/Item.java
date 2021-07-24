@@ -16,6 +16,8 @@ public class Item {
     private int itemDefense;
     private int itemSpeed;
 
+    private int extremifyCount;
+
     public Item(String name, String description, int health, int energy, int weaponDamage, int spellDamage,
                 int defense, int speed) {
         itemName = name;
@@ -26,6 +28,7 @@ public class Item {
         itemSpellDamage = spellDamage;
         itemDefense = defense;
         itemSpeed = speed;
+        extremifyCount = 0;
     }
 
     // GETTER METHODS
@@ -61,18 +64,42 @@ public class Item {
         return itemSpeed;
     }
 
+    public int getExtremifyCount() {
+        return extremifyCount;
+    }
 
     // REQUIRES: character has a name
     // MODIFIES: this
     // EFFECTS: renames item such that it follows this format: "CharacterName's ItemName"
     public void personalizeItemName(Character character) {
-        // stub
+        this.itemName = character.getCharName() + "'s " + this.itemName;
     }
 
     // REQUIRES: item cannot be equipped
     // MODIFIES: this
     // EFFECTS: doubles all of the item's stat changes, positive and negative
     public void extremifyItem() {
-        // stub
+        this.itemHealth *= 2;
+        this.itemEnergy *= 2;
+        this.itemWeaponDamage *= 2;
+        this.itemSpellDamage *= 2;
+        this.itemDefense *= 2;
+        this.itemSpeed *= 2;
+        this.extremifyCount++;
+    }
+
+    // REQUIRES: item cannot be equipped and must have been extremified at least once
+    // MODIFIES: this
+    // EFFECTS: reverts all of the item's stat changes to their original values
+    public void revertItem() {
+        while (extremifyCount > 0) {
+            this.itemHealth /= 2;
+            this.itemEnergy /= 2;
+            this.itemWeaponDamage /= 2;
+            this.itemSpellDamage /= 2;
+            this.itemDefense /= 2;
+            this.itemSpeed /= 2;
+            this.extremifyCount--;
+        }
     }
 }
