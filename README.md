@@ -12,10 +12,8 @@ the following categories:
 - Weapon
 - Spell
 - Armour
-- Consumable
-- Pet
 
-Each item has its own **description, stat benefits, and potential drawbacks**.
+Each item has its own **name, description, and stat changes**.
 Each category is *separate* from each other, and the user can freely navigate back and forth between them.
 There is also a section that *summarizes* what the user's character has currently equipped, which also shows **all of 
 the character's stats**. From there they can also *finalize* their character, at which they can name their character 
@@ -36,7 +34,7 @@ character designing application myself!
 
 ## User Stories
 
-- As a user, I want to be able to pick and add an item to my character
+- As a user, I want to be able to add an item to my character
 - As a user, I want to be able to switch an item on my character to another item of the same category
-- As a user, I want to be able to see what my character has equipped so far
-- As a user, I want to be able to select an item to learn more about it (i.e. its description and stat bonuses)
+- As a user, I want to be able to see what my character has equipped so far and its total stats
+- As a user, I want to be able to select an item to learn more about it (i.e. its description and stat changes)
