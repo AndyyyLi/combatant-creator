@@ -46,15 +46,38 @@ public class WeaponList extends Category {
     // MODIFIES: this
     // EFFECTS: arranges list by highest original weapon damage
     public void arrangeByHighestWeaponDamage() {
-        weaponList.remove(weapon2);
-        weaponList.add(weapon2);
+        List<Item> arrangedList = new ArrayList<>();
+
+        for (Item weapon : weaponList) {
+            weapon.revertItem();
+            if (arrangedList.isEmpty()) {
+                arrangedList.add(weapon);
+            } else {
+                for (Item arrangedWeapon : arrangedList) {
+                    if (weapon.getItemWeaponDamage() > arrangedWeapon.getItemWeaponDamage()) {
+                        arrangedList.add(arrangedList.indexOf(arrangedWeapon), weapon);
+                        break;
+                    }
+                }
+                if (!arrangedList.contains(weapon)) {
+                    arrangedList.add(weapon);
+                }
+            }
+        }
+
+        weaponList = arrangedList;
+        super.setItemList(weaponList);
     }
 
     // REQUIRES: list is in order of highest original weapon damage
     // MODIFIES: this
     // EFFECTS: arranges list by default
     public void arrangeWeaponsByDefault() {
-        weaponList.remove(weapon3);
+        weaponList = new ArrayList<>();
+        weaponList.add(weapon1);
+        weaponList.add(weapon2);
         weaponList.add(weapon3);
+
+        super.setItemList(weaponList);
     }
 }

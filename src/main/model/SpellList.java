@@ -26,7 +26,6 @@ public class SpellList extends Category {
         spellList.add(spell2);
         spellList.add(spell3);
 
-
         super.setItemList(spellList);
     }
 
@@ -47,17 +46,38 @@ public class SpellList extends Category {
     // MODIFIES: this
     // EFFECTS: arranges list by highest original spell damage
     public void arrangeByHighestSpellDamage() {
-        spellList.remove(spell1);
-        spellList.remove(spell2);
-        spellList.add(spell1);
-        spellList.add(spell2);
+        List<Item> arrangedList = new ArrayList<>();
+
+        for (Item spell : spellList) {
+            spell.revertItem();
+            if (arrangedList.isEmpty()) {
+                arrangedList.add(spell);
+            } else {
+                for (Item arrangedSpell : arrangedList) {
+                    if (spell.getItemSpellDamage() > arrangedSpell.getItemSpellDamage()) {
+                        arrangedList.add(arrangedList.indexOf(arrangedSpell), spell);
+                        break;
+                    }
+                }
+                if (!arrangedList.contains(spell)) {
+                    arrangedList.add(spell);
+                }
+            }
+        }
+
+        spellList = arrangedList;
+        super.setItemList(spellList);
     }
 
     // REQUIRES: list is in order of highest spell damage
     // MODIFIES: this
     // EFFECTS: arranges list by default
     public void arrangeSpellsByDefault() {
-        spellList.remove(spell3);
+        spellList = new ArrayList<>();
+        spellList.add(spell1);
+        spellList.add(spell2);
         spellList.add(spell3);
+
+        super.setItemList(spellList);
     }
 }

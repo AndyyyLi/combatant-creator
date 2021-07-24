@@ -12,13 +12,12 @@ public class ArmourList extends Category {
 
     private List<Item> armourList;
 
-    // armours in order of highest defense must be: armour2, armour3, armour1
-    private Armour armour1 = new Armour("Armour 1", "Lowest Defense",
+    private Armour armour1 = new Armour("Armour 1", "Middle Defense",
             0,0,0,0,35,0);
     private Armour armour2 = new Armour("Armour 2", "Highest Defense",
             0,0,0,0,105,0);
-    private Armour armour3 = new Armour("Armour 3", "Middle Defense",
-            0,0,0,0,60,0);
+    private Armour armour3 = new Armour("Armour 3", "Lowest Defense",
+            0,0,0,0,10,0);
 
     public ArmourList() {
         armourList = new ArrayList<>();
@@ -46,17 +45,38 @@ public class ArmourList extends Category {
     // MODIFIES: this
     // EFFECTS: arranges list by highest original defense
     public void arrangeByHighestDefense() {
-        armourList.remove(armour1);
-        armourList.add(armour1);
+        List<Item> arrangedList = new ArrayList<>();
+
+        for (Item armour : armourList) {
+            armour.revertItem();
+            if (arrangedList.isEmpty()) {
+                arrangedList.add(armour);
+            } else {
+                for (Item arrangedArmor : arrangedList) {
+                    if (armour.getItemDefense() > arrangedArmor.getItemDefense()) {
+                        arrangedList.add(arrangedList.indexOf(arrangedArmor), armour);
+                        break;
+                    }
+                }
+                if (!arrangedList.contains(armour)) {
+                    arrangedList.add(armour);
+                }
+            }
+        }
+
+        armourList = arrangedList;
+        super.setItemList(armourList);
     }
 
     // REQUIRES: list is in order of highest original defense
     // MODIFIES: this
     // EFFECTS: arranges list by default
     public void arrangeArmoursByDefault() {
-        armourList.remove(armour2);
-        armourList.remove(armour3);
+        armourList = new ArrayList<>();
+        armourList.add(armour1);
         armourList.add(armour2);
         armourList.add(armour3);
+
+        super.setItemList(armourList);
     }
 }
