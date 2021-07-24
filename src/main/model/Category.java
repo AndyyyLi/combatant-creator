@@ -22,7 +22,7 @@ public class Category {
     // REQUIRES: position must be between 1 and the size of item list (inclusive)
     // EFFECTS: returns item at given position in given category
     public Item selectItem(int position) {
-        return null;
+        return itemList.get(position - 1);
     }
 
 }

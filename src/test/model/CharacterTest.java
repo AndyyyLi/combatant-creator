@@ -18,9 +18,9 @@ public class CharacterTest {
         testWeapon = new Weapon("Weapon", "A test weapon.",
                 0,0,0,0,0,0);
         testSpell = new Spell("Spell", "A test spell.",
-                0,0,0,0,0,0);
+                50,100,25,90,30,-5);
         testArmour = new Armour("Armour", "A test armour.",
-                0,0,0,0,0,0);
+                200,-15,30,25,75,10);
     }
 
     @Test
@@ -85,19 +85,13 @@ public class CharacterTest {
         int initialHealth = testCharacter.getTotalHealth();
         int initialDefense = testCharacter.getTotalDefense();
         int initialSpeed = testCharacter.getTotalSpeed();
-        int healthChange = 50;
-        int defenseChange = 35;
-        int speedChange = -10;
 
-        Armour armourWithStats = new Armour("Stats Armour", "Armour with stats",
-                healthChange,0, 0,0, defenseChange, speedChange);
+        assertTrue(testCharacter.canEquipItem(testArmour));
+        testCharacter.equipItem(testArmour);
 
-        assertTrue(testCharacter.canEquipItem(armourWithStats));
-        testCharacter.equipItem(armourWithStats);
-
-        assertEquals(initialHealth + healthChange, testCharacter.getTotalHealth());
-        assertEquals(initialDefense + defenseChange, testCharacter.getTotalDefense());
-        assertEquals(initialSpeed + speedChange, testCharacter.getTotalSpeed());
+        assertEquals(initialHealth + testArmour.getItemHealth(), testCharacter.getTotalHealth());
+        assertEquals(initialDefense + testArmour.getItemDefense(), testCharacter.getTotalDefense());
+        assertEquals(initialSpeed + testArmour.getItemSpeed(), testCharacter.getTotalSpeed());
     }
 
     @Test
@@ -143,7 +137,7 @@ public class CharacterTest {
     @Test
     public void testCannotEquipItemBecauseNegSpeed() {
         Armour tooHeavyArmour = new Armour("Too Heavy Armour", "Can't move with this!",
-                0,0,0,0,0,-1);
+                0,0,0,0,0,-25);
 
         assertFalse(testCharacter.canEquipItem(tooHeavyArmour));
     }
@@ -158,14 +152,29 @@ public class CharacterTest {
     }
 
     @Test
-    public void testRemoveItem() {
+    public void testEquipThenRemoveItemWithStats() {
+        testCharacter.equipItem(testWeapon);
         testCharacter.equipItem(testSpell);
+        testCharacter.equipItem(testArmour);
 
-        assertEquals(testCharacter.getCurrentSpell(), testSpell);
+        assertEquals(testWeapon, testCharacter.getCurrentWeapon());
+        assertEquals(testSpell, testCharacter.getCurrentSpell());
+        assertEquals(testArmour, testCharacter.getCurrentArmour());
 
+        testCharacter.removeItem(testWeapon);
         testCharacter.removeItem(testSpell);
+        testCharacter.removeItem(testArmour);
 
+        assertEquals(null, testCharacter.getCurrentWeapon());
         assertEquals(null, testCharacter.getCurrentSpell());
+        assertEquals(null, testCharacter.getCurrentArmour());
+
+        assertEquals(100, testCharacter.getTotalHealth());
+        assertEquals(100, testCharacter.getTotalEnergy());
+        assertEquals(0, testCharacter.getTotalWeaponDamage());
+        assertEquals(0, testCharacter.getTotalSpellDamage());
+        assertEquals(0, testCharacter.getTotalDefense());
+        assertEquals(25, testCharacter.getTotalSpeed());
     }
 
 }

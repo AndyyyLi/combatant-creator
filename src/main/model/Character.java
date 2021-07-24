@@ -76,23 +76,34 @@ public class Character {
         return currentArmour;
     }
 
-
-
     // REQUIRES: name must be at least 1 character long
     // MODIFIES: this
     // EFFECTS: sets character's name as given name
     public void setName(String name) {
-        // stub
+        this.charName = name;
     }
 
     // MODIFIES: this
-    // EFFECTS: if item can be equipped, then:
-    //              - if character is not equipped with anything from this category, equip current item
-    //              - if character has something ELSE equipped from this category, remove previously equipped item
-    //                from character and equip current item
+    // EFFECTS: if item can be equipped then equip item, if there already is an equipped item of that category
+    //          then replace it with given item
     //          if item cannot be equipped, nothing changes
     public void equipItem(Item item) {
-        // stub
+        if (canEquipItem(item)) {
+            if (item instanceof Weapon) {
+                this.currentWeapon = (Weapon) item;
+            } else if (item instanceof Spell) {
+                this.currentSpell = (Spell) item;
+            } else {
+                this.currentArmour = (Armour) item;
+            }
+
+            this.totalHealth += item.getItemHealth();
+            this.totalEnergy += item.getItemEnergy();
+            this.totalWeaponDamage += item.getItemWeaponDamage();
+            this.totalSpellDamage += item.getItemSpellDamage();
+            this.totalDefense += item.getItemDefense();
+            this.totalSpeed += item.getItemSpeed();
+        }
     }
 
     // EFFECTS: returns true only if equipping given item keeps the character's total health, energy, and speed stats
@@ -100,14 +111,35 @@ public class Character {
     //          non-negative
     //          otherwise return false
     public boolean canEquipItem(Item item) {
-        return false;
+        int finalHealth = this.totalHealth + item.getItemHealth();
+        int finalEnergy = this.totalEnergy + item.getItemEnergy();
+        int finalWeaponDmg = this.totalWeaponDamage + item.getItemWeaponDamage();
+        int finalSpellDmg = this.totalSpellDamage + item.getItemSpellDamage();
+        int finalDefense = this.totalDefense + item.getItemDefense();
+        int finalSpeed = this.totalSpeed + item.getItemSpeed();
+
+        return (finalHealth > 0 && finalEnergy > 0 && finalWeaponDmg >= 0 && finalSpellDmg >= 0 && finalDefense >= 0
+                && finalSpeed > 0);
     }
 
     // REQUIRES: character has this item equipped
     // MODIFIES: this
     // EFFECTS: removes currently equipped item from character
     public void removeItem(Item item) {
-        // stub
+        if (item instanceof Weapon) {
+            this.currentWeapon = null;
+        } else if (item instanceof Spell) {
+            this.currentSpell = null;
+        } else {
+            this.currentArmour = null;
+        }
+
+        this.totalHealth -= item.getItemHealth();
+        this.totalEnergy -= item.getItemEnergy();
+        this.totalWeaponDamage -= item.getItemWeaponDamage();
+        this.totalSpellDamage -= item.getItemSpellDamage();
+        this.totalDefense -= item.getItemDefense();
+        this.totalSpeed -= item.getItemSpeed();
     }
 
 }

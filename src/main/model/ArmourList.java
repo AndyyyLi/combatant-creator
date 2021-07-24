@@ -42,9 +42,21 @@ public class ArmourList extends Category {
         return armour3;
     }
 
+    // REQUIRES: list is in default order
+    // MODIFIES: this
     // EFFECTS: arranges list by highest original defense
-    public ArmourList arrangeByHighestDefense() {
-        return null;
+    public void arrangeByHighestDefense() {
+        armourList.remove(armour1);
+        armourList.add(armour1);
     }
 
+    // REQUIRES: list is in order of highest original defense
+    // MODIFIES: this
+    // EFFECTS: arranges list by default
+    public void arrangeArmoursByDefault() {
+        armourList.remove(armour2);
+        armourList.remove(armour3);
+        armourList.add(armour2);
+        armourList.add(armour3);
+    }
 }

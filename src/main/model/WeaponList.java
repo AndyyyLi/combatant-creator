@@ -42,8 +42,19 @@ public class WeaponList extends Category {
         return weapon3;
     }
 
+    // REQUIRES: list is in default order
+    // MODIFIES: this
     // EFFECTS: arranges list by highest original weapon damage
-    public WeaponList arrangeByHighestWeaponDamage() {
-        return null;
+    public void arrangeByHighestWeaponDamage() {
+        weaponList.remove(weapon2);
+        weaponList.add(weapon2);
+    }
+
+    // REQUIRES: list is in order of highest original weapon damage
+    // MODIFIES: this
+    // EFFECTS: arranges list by default
+    public void arrangeWeaponsByDefault() {
+        weaponList.remove(weapon3);
+        weaponList.add(weapon3);
     }
 }

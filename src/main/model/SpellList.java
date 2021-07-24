@@ -43,8 +43,21 @@ public class SpellList extends Category {
         return spell3;
     }
 
+    // REQUIRES: list is in default order
+    // MODIFIES: this
     // EFFECTS: arranges list by highest original spell damage
-    public SpellList arrangeByHighestSpellDamage() {
-        return null;
+    public void arrangeByHighestSpellDamage() {
+        spellList.remove(spell1);
+        spellList.remove(spell2);
+        spellList.add(spell1);
+        spellList.add(spell2);
+    }
+
+    // REQUIRES: list is in order of highest spell damage
+    // MODIFIES: this
+    // EFFECTS: arranges list by default
+    public void arrangeSpellsByDefault() {
+        spellList.remove(spell3);
+        spellList.add(spell3);
     }
 }

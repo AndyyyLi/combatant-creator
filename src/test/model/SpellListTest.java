@@ -23,9 +23,18 @@ public class SpellListTest {
 
     @Test
     public void testArrangeByHighestSpellDamage() {
-        SpellList arrangedList = testSpellList.arrangeByHighestSpellDamage();
-        assertEquals(testSpellList.getSpell3(), arrangedList.selectItem(1));
-        assertEquals(testSpellList.getSpell1(), arrangedList.selectItem(2));
-        assertEquals(testSpellList.getSpell2(), arrangedList.selectItem(3));
+        testSpellList.arrangeByHighestSpellDamage();
+        assertEquals(testSpellList.getSpell3(), testSpellList.selectItem(1));
+        assertEquals(testSpellList.getSpell1(), testSpellList.selectItem(2));
+        assertEquals(testSpellList.getSpell2(), testSpellList.selectItem(3));
+    }
+
+    @Test
+    public void testRevertedSpellList() {
+        testSpellList.arrangeByHighestSpellDamage();
+        testSpellList.arrangeSpellsByDefault();
+        assertEquals(testSpellList.getSpell1(), testSpellList.selectItem(1));
+        assertEquals(testSpellList.getSpell2(), testSpellList.selectItem(2));
+        assertEquals(testSpellList.getSpell3(), testSpellList.selectItem(3));
     }
 }
