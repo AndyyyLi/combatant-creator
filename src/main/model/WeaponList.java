@@ -12,13 +12,16 @@ public class WeaponList extends Category {
 
     private List<Item> weaponList;
 
-    // weapons in order of highest weapon damage must be: weapon1, weapon3, weapon2
-    private Weapon weapon1 = new Weapon("Weapon 1", "Highest Damage",
-            0,0,85,0,0,0);
-    private Weapon weapon2 = new Weapon("Weapon 2", "Lowest Damage",
-            0,0,30,0,0,0);
-    private Weapon weapon3 = new Weapon("Weapon 3", "Middle Damage",
-            0,0,75,0,0,0);
+    // weapons in order of highest weapon damage must be: weapon1, weapon3, weapon2, in order for test class to pass
+    private Weapon weapon1 = new Weapon("Sword of the Void",
+            "Forged in the forbidden dimensions, the blade emits an intimidating yet mysterious energy.",
+            -25,0,180,0,0,45);
+    private Weapon weapon2 = new Weapon("Crusader's Crossbow",
+            "A trusty crossbow to take down opponents from afar and a must-have for spell-lovers!",
+            0,80,75,0,0,30);
+    private Weapon weapon3 = new Weapon("Trinity Gauntlet",
+            "Get up in their face and pack a punch that they won't forget...if they're still alive.",
+            95,0,150,0,45,60);
 
     public WeaponList() {
         weaponList = new ArrayList<>();

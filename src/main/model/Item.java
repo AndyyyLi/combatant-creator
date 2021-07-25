@@ -68,13 +68,6 @@ public class Item {
         return extremifyCount;
     }
 
-    // REQUIRES: character has a name
-    // MODIFIES: this
-    // EFFECTS: renames item such that it follows this format: "CharacterName's ItemName"
-    public void personalizeItemName(Character character) {
-        this.itemName = character.getCharName() + "'s " + this.itemName;
-    }
-
     // REQUIRES: item cannot be equipped
     // MODIFIES: this
     // EFFECTS: doubles all of the item's stat changes, positive and negative

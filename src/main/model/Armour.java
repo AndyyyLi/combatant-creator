@@ -10,7 +10,7 @@ public class Armour extends Item {
     // material can be Super Steel (default), Ice Diamond, or Magma Obsidian
     private String material;
 
-    // defensive ability can be None (default), Rapid Regen, Shockback, or Nimble Rush
+    // defensive ability can be No Ability (default), Rapid Regen, Shockback, or Nimble Rush
     private String defensiveAbility;
 
     public Armour(String name, String description, int health, int energy, int weaponDamage, int spellDamage,
@@ -37,7 +37,7 @@ public class Armour extends Item {
         this.material = material;
     }
 
-    // REQUIRES: ability name is one of: None, Rapid Regen, Shockback, Nimble Rush
+    // REQUIRES: ability name is one of: No Ability, Rapid Regen, Shockback, Nimble Rush
     // MODIFIES: this
     // EFFECTS: changes armour's defensive ability to given ability, even if they are the same
     public void changeDefensiveAbility(String defensiveAbility) {

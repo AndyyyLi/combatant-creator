@@ -35,7 +35,7 @@ public class CharacterTest {
 
     @Test
     public void testConstructedName() {
-        assertEquals(null, testCharacter.getCharName());
+        assertEquals("Your combatant", testCharacter.getCharName());
     }
 
     @Test

@@ -38,7 +38,7 @@ public class Weapon extends Item {
         this.hitEffect = hitEffect;
     }
 
-    // REQUIRES: effect intensity is in range [0,5]
+    // REQUIRES: effect intensity is in range [1,5] except for No Effect, which must have 0 intensity
     // MODIFIES: this
     // EFFECTS: sets effect intensity to given number, even if they are the same
     public void setEffectIntensity(int effectIntensity) {

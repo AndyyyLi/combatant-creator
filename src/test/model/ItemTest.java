@@ -44,16 +44,6 @@ public class ItemTest {
     }
 
     @Test
-    public void testPersonalizeItemName() {
-        Character testChar = new Character();
-        testChar.setName("John Smith");
-
-        testItem.personalizeItemName(testChar);
-
-        assertEquals(testChar.getCharName() + "'s " + itemName, testItem.getName());
-    }
-
-    @Test
     public void testExtremifyItem() {
         testItem.extremifyItem();
 

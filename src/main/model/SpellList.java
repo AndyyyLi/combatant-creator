@@ -12,13 +12,16 @@ public class SpellList extends Category {
 
     private List<Item> spellList;
 
-    // spells in order of highest spell damage must be: spell3, spell1, spell2
-    private Spell spell1 = new Spell("Spell 1", "Middle Damage",
-            0,0,0,110,0,0);
-    private Spell spell2 = new Spell("Spell 2", "Lowest Damage",
-            0,0,0,55,0,0);
-    private Spell spell3 = new Spell("Spell 3", "Highest Damage",
-            0,0,0,230,0,0);
+    // spells in order of highest spell damage must be: spell3, spell1, spell2, in order for test class to pass
+    private Spell spell1 = new Spell("Spellweaver",
+            "A powerful spell that can be casted quite a few times!",
+            0,200,0,135,0,0);
+    private Spell spell2 = new Spell("Spell of Wonders",
+            "A defensive spell which provides decent damage but additional stats.",
+            65,120,0,75,35,30);
+    private Spell spell3 = new Spell("Rabadon's Spellstrike",
+            "A devastating spell which sacrifices your survivability for firepower.",
+            -30,50,0,250,-20,0);
 
     public SpellList() {
         spellList = new ArrayList<>();

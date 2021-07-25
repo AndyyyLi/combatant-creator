@@ -12,12 +12,14 @@ public class ArmourList extends Category {
 
     private List<Item> armourList;
 
-    private Armour armour1 = new Armour("Armour 1", "Middle Defense",
-            0,0,0,0,35,0);
-    private Armour armour2 = new Armour("Armour 2", "Highest Defense",
-            0,0,0,0,105,0);
-    private Armour armour3 = new Armour("Armour 3", "Lowest Defense",
-            0,0,0,0,10,0);
+    // armours in order of highest defense must be: armour2, armour1, armour3, in order for test class to pass
+    private Armour armour1 = new Armour("Knight's Battle Armour",
+            "Old but always gold, enhances your spellcasting too!.",
+            150,80,0,0,75,0);
+    private Armour armour2 = new Armour("Armour of the Ages", "Very protective, but lacks mobility.",
+            300,0,0,0,135,-15);
+    private Armour armour3 = new Armour("Windrider Armour", "For those who just want speed.",
+            60,0,0,0,30,65);
 
     public ArmourList() {
         armourList = new ArrayList<>();
