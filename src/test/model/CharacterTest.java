@@ -100,6 +100,8 @@ public class CharacterTest {
                 -100,0,0,0,0,0);
 
         assertFalse(testCharacter.canEquipItem(badArmour));
+        testCharacter.equipItem(badArmour);
+        assertEquals(null, testCharacter.getCurrentArmour());
     }
 
     @Test
