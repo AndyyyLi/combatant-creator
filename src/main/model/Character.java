@@ -21,7 +21,7 @@ public class Character {
 
 
     public Character() {
-        charName = null;
+        charName = "Your combatant";
 
         totalHealth = 100;
         totalEnergy = 100;
