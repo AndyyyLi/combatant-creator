@@ -68,6 +68,7 @@ public class Item {
         return extremifyCount;
     }
 
+
     // REQUIRES: item cannot be equipped
     // MODIFIES: this
     // EFFECTS: doubles all of the item's stat changes, positive and negative

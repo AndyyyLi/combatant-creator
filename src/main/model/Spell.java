@@ -21,6 +21,7 @@ public class Spell extends Item {
         return element;
     }
 
+
     // REQUIRES: element name is one of: Normal, Fire, Water, Ground
     // MODIFIES: this
     // EFFECTS: sets element to given element, even if they are the same

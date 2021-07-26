@@ -45,6 +45,7 @@ public class WeaponList extends Category {
         return weapon3;
     }
 
+
     // REQUIRES: list is in default order
     // MODIFIES: this
     // EFFECTS: arranges list by highest original weapon damage

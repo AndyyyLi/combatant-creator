@@ -76,6 +76,7 @@ public class Character {
         return currentArmour;
     }
 
+
     // REQUIRES: name must be at least 1 character long
     // MODIFIES: this
     // EFFECTS: sets character's name as given name

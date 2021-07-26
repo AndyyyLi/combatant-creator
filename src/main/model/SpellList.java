@@ -45,6 +45,7 @@ public class SpellList extends Category {
         return spell3;
     }
 
+
     // REQUIRES: list is in default order
     // MODIFIES: this
     // EFFECTS: arranges list by highest original spell damage

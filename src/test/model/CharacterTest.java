@@ -149,7 +149,6 @@ public class CharacterTest {
         String testName = "Jason";
 
         testCharacter.setName(testName);
-
         assertEquals(testName, testCharacter.getCharName());
     }
 

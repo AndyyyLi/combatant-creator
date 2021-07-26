@@ -90,6 +90,7 @@ public class CombatantCreator {
     // EFFECTS: prints item list of given category
     public void printItemList(Category c) {
         int count = 1;
+
         for (Item item : c.getItemList()) {
             System.out.println("\t" + count + ". " + item.getName());
             count++;
@@ -407,16 +408,19 @@ public class CombatantCreator {
     public void printReplacement(Item item) {
         if (item instanceof Weapon) {
             Weapon prevWeapon = character.getCurrentWeapon();
+
             if (!(prevWeapon == null)) {
                 System.out.println("\nReplacing " + prevWeapon.getName() + " with " + item.getName() + "!");
             }
         } else if (item instanceof Spell) {
             Spell prevSpell = character.getCurrentSpell();
+
             if (!(prevSpell == null)) {
                 System.out.println("\nReplacing " + prevSpell.getName() + " with " + item.getName() + "!");
             }
         } else {
             Armour prevArmour = character.getCurrentArmour();
+
             if (!(prevArmour == null)) {
                 System.out.println("\nReplacing " + prevArmour.getName() + " with " + item.getName() + "!");
             }

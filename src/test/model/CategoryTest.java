@@ -23,11 +23,13 @@ public class CategoryTest {
     @BeforeEach
     public void setUp() {
         listOfSomeItems = new ArrayList<>();
+
         listOfSomeItems.add(item1);
         listOfSomeItems.add(item2);
         listOfSomeItems.add(item3);
 
         testItemList = new Category();
+
         testItemList.setItemList(listOfSomeItems);
     }
 

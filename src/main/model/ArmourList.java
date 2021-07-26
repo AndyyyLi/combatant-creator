@@ -43,6 +43,7 @@ public class ArmourList extends Category {
         return armour3;
     }
 
+
     // REQUIRES: list is in default order
     // MODIFIES: this
     // EFFECTS: arranges list by highest original defense

@@ -19,7 +19,6 @@ public class ArmourListTest {
         assertEquals(testArmourList.getArmour1(), testArmourList.selectItem(1));
         assertEquals(testArmourList.getArmour2(), testArmourList.selectItem(2));
         assertEquals(testArmourList.getArmour3(), testArmourList.selectItem(3));
-
     }
 
     @Test
@@ -37,6 +36,5 @@ public class ArmourListTest {
         assertEquals(testArmourList.getArmour1(), testArmourList.selectItem(1));
         assertEquals(testArmourList.getArmour2(), testArmourList.selectItem(2));
         assertEquals(testArmourList.getArmour3(), testArmourList.selectItem(3));
-
     }
 }
