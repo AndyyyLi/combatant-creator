@@ -39,3 +39,5 @@ character designing application myself!
 - As a user, I want to be able to switch my currently equipped item to another item of the same category
 - As a user, I want to be able to see what my character has equipped so far and its total stats
 - As a user, I want to be able to select an item to learn more about it (i.e. its description and stat changes)
+- As a user, I want to be able to save my current character to file, including name, equipment, and stats
+- As a user, I want to be able to load my saved character from file or create a new one when I start the game
