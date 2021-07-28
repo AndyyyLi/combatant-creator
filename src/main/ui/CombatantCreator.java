@@ -463,7 +463,7 @@ public class CombatantCreator {
 
         while (!(effect.equals("0") || effect.equals("1") || effect.equals("2") || effect.equals("3")
                 || effect.equals("4"))) {
-            System.out.println("Number must be between 1 and 5 (inclusive)!");
+            invalidInput();
             effect = input.next();
         }
 
@@ -487,7 +487,7 @@ public class CombatantCreator {
 
         while (!(intensity.equals("1") || intensity.equals("2") || intensity.equals("3") || intensity.equals("4")
                 || intensity.equals("5"))) {
-            invalidInput();
+            System.out.println("Number must be between 1 and 5 (inclusive)!");
             intensity = input.next();
         }
 
@@ -587,8 +587,7 @@ public class CombatantCreator {
     public void setArmourDefensiveAbility(Armour armour) {
         String ability = input.next();
 
-        while (!(ability.equals("0") || ability.equals("1") || ability.equals("2") || ability.equals("3")
-                || ability.equals("4"))) {
+        while (!(ability.equals("0") || ability.equals("1") || ability.equals("2") || ability.equals("3"))) {
             invalidInput();
             ability = input.next();
         }
