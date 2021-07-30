@@ -1,0 +1,14 @@
+{
+  "name": "Your combatant",
+  "weapon": "None",
+  "weaponAdjust": 0,
+  "weaponEffect": "None",
+  "weaponIntensity": 0,
+  "spell": "None",
+  "spellAdjust": 0,
+  "spellElement": "None",
+  "armour": "None",
+  "armourAdjust": 0,
+  "armourMaterial": "None",
+  "armourAbility": "None"
+}
