@@ -59,6 +59,7 @@ public class JsonSaverTest extends JsonItemTest {
 
             character.setName("Pantheon");
 
+            weapons.getWeapon1().extremifyItem();
             weapons.getWeapon1().applyHitEffect("Multihit");
             weapons.getWeapon1().setEffectIntensity(3);
             character.equipItem(weapons.getWeapon1());
@@ -98,12 +99,12 @@ public class JsonSaverTest extends JsonItemTest {
             assertEquals(actualArmour.getMaterial(), character.getCurrentArmour().getMaterial());
             assertEquals(actualArmour.getDefensiveAbility(), character.getCurrentArmour().getDefensiveAbility());
 
-            assertEquals(455, character.getTotalHealth());
+            assertEquals(430, character.getTotalHealth());
             assertEquals(580, character.getTotalEnergy());
-            assertEquals(180, character.getTotalWeaponDamage());
+            assertEquals(360, character.getTotalWeaponDamage());
             assertEquals(300, character.getTotalSpellDamage());
             assertEquals(200, character.getTotalDefense());
-            assertEquals(320, character.getTotalSpeed());
+            assertEquals(365, character.getTotalSpeed());
         } catch (IOException e) {
             fail("File not found!");
         }

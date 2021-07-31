@@ -65,15 +65,19 @@ public class JsonLoader {
 
         Character character = new Character();
         character.setName(charName);
+
         if (!jsonObject.getString("weapon").equals("None")) {
             addWeapon(character, jsonObject);
         }
+
         if (!jsonObject.getString("spell").equals("None")) {
             addSpell(character, jsonObject);
         }
+
         if (!jsonObject.getString("armour").equals("None")) {
             addArmour(character, jsonObject);
         }
+
         return character;
     }
 
@@ -93,8 +97,7 @@ public class JsonLoader {
                 Weapon realWeapon = (Weapon) weapon;
                 realWeapon.applyHitEffect(weaponEffect);
                 realWeapon.setEffectIntensity(weaponIntensity);
-                character.equipItem(weapon);
-                break;
+                character.setItem(realWeapon);
             }
         }
     }
@@ -113,8 +116,7 @@ public class JsonLoader {
                 }
                 Spell realSpell = (Spell) spell;
                 realSpell.pickElement(spellElement);
-                character.equipItem(spell);
-                break;
+                character.setItem(realSpell);
             }
         }
     }
@@ -135,8 +137,7 @@ public class JsonLoader {
                 Armour realArmour = (Armour) armour;
                 realArmour.changeMaterial(armourMaterial);
                 realArmour.changeDefensiveAbility(armourAbility);
-                character.equipItem(armour);
-                break;
+                character.setItem(realArmour);
             }
         }
     }

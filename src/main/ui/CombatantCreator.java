@@ -2,8 +2,13 @@ package ui;
 
 import model.*;
 import model.Character;
+import org.json.JSONException;
+import persistence.JsonLoader;
+import persistence.JsonSaver;
 
 // All usages of Scanner and input based on TellerApp
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -12,11 +17,14 @@ import java.util.Scanner;
 
 public class CombatantCreator {
 
+    private static final String JSON_FILE = "./data/character.json";
     private Character character;
     private WeaponList weaponList;
     private SpellList spellList;
     private ArmourList armourList;
     private Scanner input;
+    private JsonSaver jsonSaver;
+    private JsonLoader jsonLoader;
 
     private Category currentCategory;
 
@@ -24,10 +32,12 @@ public class CombatantCreator {
     private boolean spellsAreArranged = false;
     private boolean armoursAreArranged = false;
 
+
     // Constructor, runCreator, initialize, print and display methods all based on TellerApp
 
+    // exception thrown in constructor based on JsonSerializationDemo
     // EFFECTS: runs Combatant Creator application
-    public CombatantCreator() {
+    public CombatantCreator() throws FileNotFoundException {
         runCreator();
     }
 
@@ -42,6 +52,8 @@ public class CombatantCreator {
         currentCategory = weaponList;
 
         System.out.println("Welcome to Combatant Creator!");
+
+        pickNewOrSavedCharacter();
 
         while (appRunning) {
             displayCurrentCategory(currentCategory);
@@ -68,6 +80,26 @@ public class CombatantCreator {
         armourList = new ArmourList();
 
         input = new Scanner(System.in);
+
+        jsonSaver = new JsonSaver(JSON_FILE);
+        jsonLoader = new JsonLoader(JSON_FILE);
+    }
+
+    public void pickNewOrSavedCharacter() {
+        System.out.println("c: Create new character");
+        System.out.println("l: Load saved character");
+        String choice = input.next().toLowerCase();
+
+        while (!(choice.equals("c") || choice.equals("l"))) {
+            invalidInput();
+            choice = input.next().toLowerCase();
+        }
+
+        if (choice.equals("l")) {
+            loadCharacter();
+        }
+
+        // input "c" ends this method and starts app with a new character
     }
 
     // EFFECTS: shows list of items of current category to user
@@ -125,6 +157,7 @@ public class CombatantCreator {
         System.out.println("name: Change your character's name");
         System.out.println("switch: Switch current category");
         System.out.println("summary: See your character's name, equipment, and stats");
+        System.out.println("save: Save your current character to file");
         System.out.println("finish: Finish character creation");
     }
 
@@ -148,6 +181,8 @@ public class CombatantCreator {
             pickName();
         } else if (select.equals("switch")) {
             switchCategory();
+        } else if (select.equals("save")) {
+            saveCharacter();
         } else if (select.equals("summary")) {
             printCharacterSummary();
         } else {
@@ -654,9 +689,35 @@ public class CombatantCreator {
         System.out.println("Speed: " + character.getTotalSpeed());
     }
 
+    // save and load character methods based on JsonSerializationDemo
+
+    // EFFECTS: saves character to file
+    public void saveCharacter() {
+        try {
+            jsonSaver.open();
+            jsonSaver.save(character);
+            jsonSaver.close();
+            System.out.println(character.getCharName() + " has been saved!");
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save to file: " + JSON_FILE);
+        }
+    }
+
+    // MODIFIES: this and character
+    // EFFECTS: loads character from file
+    public void loadCharacter() {
+        try {
+            character = jsonLoader.load();
+            System.out.println(character.getCharName() + " is back for some changes!");
+        } catch (IOException e) {
+            System.out.println("Load error from file: " + JSON_FILE);
+        } catch (JSONException e) {
+            System.out.println("No character saved! Creating new character...");
+        }
+    }
+
     // EFFECTS: prints an error statement notifying user that their input was not valid
     public void invalidInput() {
         System.err.println("\nUh oh, your input is not valid! Please try again.");
     }
-
 }

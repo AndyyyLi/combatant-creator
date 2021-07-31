@@ -93,21 +93,27 @@ public class Character implements Savable {
     //          if item cannot be equipped, nothing changes
     public void equipItem(Item item) {
         if (canEquipItem(item)) {
-            if (item instanceof Weapon) {
-                this.currentWeapon = (Weapon) item;
-            } else if (item instanceof Spell) {
-                this.currentSpell = (Spell) item;
-            } else {
-                this.currentArmour = (Armour) item;
-            }
-
-            this.totalHealth += item.getItemHealth();
-            this.totalEnergy += item.getItemEnergy();
-            this.totalWeaponDamage += item.getItemWeaponDamage();
-            this.totalSpellDamage += item.getItemSpellDamage();
-            this.totalDefense += item.getItemDefense();
-            this.totalSpeed += item.getItemSpeed();
+            setItem(item);
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: equips item onto character, can only be directly called by JsonLoader
+    public void setItem(Item item) {
+        if (item instanceof Weapon) {
+            this.currentWeapon = (Weapon) item;
+        } else if (item instanceof Spell) {
+            this.currentSpell = (Spell) item;
+        } else {
+            this.currentArmour = (Armour) item;
+        }
+
+        this.totalHealth += item.getItemHealth();
+        this.totalEnergy += item.getItemEnergy();
+        this.totalWeaponDamage += item.getItemWeaponDamage();
+        this.totalSpellDamage += item.getItemSpellDamage();
+        this.totalDefense += item.getItemDefense();
+        this.totalSpeed += item.getItemSpeed();
     }
 
     // EFFECTS: returns true only if equipping given item keeps the character's total health, energy, and speed stats
