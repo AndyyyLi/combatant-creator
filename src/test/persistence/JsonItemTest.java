@@ -4,6 +4,7 @@ import model.Item;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+// JsonItemTest superclass based on JsonSerializationDemo's JsonTest class
 public class JsonItemTest {
     protected void checkItem(Item actualItem, Item item) {
         assertEquals(actualItem.getClass(), item.getClass());

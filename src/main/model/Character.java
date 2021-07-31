@@ -1,11 +1,14 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Savable;
+
 /**
  * Character class represents customizable character with a name, 6 unique stats, and 3 equipment slots,
  * each for a different type of equipment.
  */
 
-public class Character {
+public class Character implements Savable {
     private String charName;
 
     private int totalHealth;
@@ -143,4 +146,50 @@ public class Character {
         this.totalSpeed -= item.getItemSpeed();
     }
 
+    // EFFECTS: creates JSON Object out of character and equipped items
+    @Override
+    public JSONObject convertToJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", getCharName());
+        saveWeapon(json);
+        saveSpell(json);
+        saveArmour(json);
+
+        return json;
+    }
+
+    // EFFECTS: adds equipped weapon to JSON Object, adds default values if none equipped
+    public void saveWeapon(JSONObject json) {
+        if (getCurrentWeapon() == null) {
+            json.put("weapon", "None");
+        } else {
+            json.put("weapon", getCurrentWeapon().getName());
+            json.put("weaponAdjust", getCurrentWeapon().getExtremifyCount());
+            json.put("weaponEffect", getCurrentWeapon().getHitEffect());
+            json.put("weaponIntensity", getCurrentWeapon().getEffectIntensity());
+        }
+    }
+
+    // EFFECTS: adds equipped spell to JSON Object, adds default values if none equipped
+    public void saveSpell(JSONObject json) {
+        if (getCurrentSpell() == null) {
+            json.put("spell", "None");
+        } else {
+            json.put("spell", getCurrentSpell().getName());
+            json.put("spellAdjust", getCurrentSpell().getExtremifyCount());
+            json.put("spellElement", getCurrentSpell().getElement());
+        }
+    }
+
+    // EFFECTS: adds equipped armour to JSON Object, adds default values if none equipped
+    public void saveArmour(JSONObject json) {
+        if (getCurrentArmour() == null) {
+            json.put("armour", "None");
+        } else {
+            json.put("armour", getCurrentArmour().getName());
+            json.put("armourAdjust", getCurrentArmour().getExtremifyCount());
+            json.put("armourMaterial", getCurrentArmour().getMaterial());
+            json.put("armourAbility", getCurrentArmour().getDefensiveAbility());
+        }
+    }
 }

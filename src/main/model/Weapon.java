@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 /**
  * Weapon is a type of Item which mainly provides stat changes to weapon damage and speed, and also include
  * exclusive options to add a hit effect and choose the effect's intensity, which varies per effect
@@ -44,5 +46,4 @@ public class Weapon extends Item {
     public void setEffectIntensity(int effectIntensity) {
         this.effectIntensity = effectIntensity;
     }
-
 }

@@ -10,6 +10,10 @@ import model.*;
 import model.Character;
 import org.json.*;
 
+/**
+ * JsonLoader class loads character and exact equipment (including special features and extremifications) from file
+ * All methods above and including parseCharacter() are based on JsonSerializationDemo's JsonReader class
+ */
 public class JsonLoader {
     private String source;
     private WeaponList weaponList = new WeaponList();

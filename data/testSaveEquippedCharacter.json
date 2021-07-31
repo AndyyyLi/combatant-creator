@@ -1,0 +1,14 @@
+{
+  "armourMaterial": "Magma Obsidian",
+  "weapon": "Sword of the Void",
+  "spell": "Spell of Wonders",
+  "weaponEffect": "Multihit",
+  "name": "Pantheon",
+  "armourAdjust": 1,
+  "spellElement": "Fire",
+  "armourAbility": "Rapid Regen",
+  "weaponAdjust": 0,
+  "spellAdjust": 2,
+  "weaponIntensity": 3,
+  "armour": "Windrider Armour"
+}

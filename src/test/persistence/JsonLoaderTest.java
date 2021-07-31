@@ -5,10 +5,10 @@ import model.Character;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// JsonLoaderTest test cases and test .json files based on JsonSerializationDemo's JsonReaderTest
 public class JsonLoaderTest extends JsonItemTest {
 
     @Test
