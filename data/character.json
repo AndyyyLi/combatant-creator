@@ -1,14 +1,11 @@
 {
-  "armourMaterial": "Ice Diamond",
-  "weapon": "Crusader's Crossbow",
+  "armourMaterial": "Super Steel",
+  "weapon": "None",
   "spell": "Rabadon's Spellstrike",
-  "weaponEffect": "Multihit",
-  "name": "Andy Lee",
-  "armourAdjust": 1,
-  "spellElement": "Fire",
-  "armourAbility": "Nimble Rush",
-  "weaponAdjust": 0,
+  "name": "Andy",
+  "armourAdjust": 0,
+  "spellElement": "Normal",
+  "armourAbility": "None",
   "spellAdjust": 0,
-  "weaponIntensity": 2,
   "armour": "Knight's Battle Armour"
 }
