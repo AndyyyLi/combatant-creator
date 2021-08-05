@@ -1,7 +1,6 @@
 package ui.tabs;
 
 import model.Character;
-import persistence.JsonLoader;
 import persistence.JsonSaver;
 import ui.CombatantCreatorGUI;
 
@@ -34,6 +33,10 @@ public class SummaryTab extends JPanel {
         placeEquipment();
         placeStats();
         placeOptions();
+    }
+
+    public CombatantCreatorGUI getController() {
+        return controller;
     }
 
     public void placeName() {
@@ -187,6 +190,7 @@ public class SummaryTab extends JPanel {
             if (name != null) {
                 character.setName(name);
                 refreshTab();
+                getController().playSound("name.wav");
                 JOptionPane.showMessageDialog(null, "Your character is now named "
                         + character.getCharName());
             }
@@ -201,6 +205,7 @@ public class SummaryTab extends JPanel {
                 jsonSaver.open();
                 jsonSaver.save(character);
                 jsonSaver.close();
+                getController().playSound("save.wav");
                 JOptionPane.showMessageDialog(null,
                         character.getCharName() + " has been saved to file!");
             } catch (FileNotFoundException exception) {
@@ -216,6 +221,7 @@ public class SummaryTab extends JPanel {
         public void actionPerformed(ActionEvent e) {
             int input = JOptionPane.showConfirmDialog(null, "Are you sure you're done?");
             if (input == 0) {
+                getController().playSound("finish.wav");
                 UIManager.put("OptionPane.okButtonText", "Finish");
                 JOptionPane.showMessageDialog(null,
                         character.getCharName() + " is ready for battle!");

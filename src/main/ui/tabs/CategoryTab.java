@@ -41,7 +41,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
 
     // EFFECTS: creates and returns row with button included
     public JPanel formatButtonRow(JButton b) {
-        b.setPreferredSize(new Dimension(200,100));
+        b.setPreferredSize(new Dimension(200, 100));
         b.setFont(b.getFont().deriveFont(20f));
         JPanel p = new JPanel();
         p.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 30));
@@ -143,6 +143,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         }
 
         public void displayInfo(Item item) {
+            getController().playSound("info.wav");
             JOptionPane.showMessageDialog(null,
                     "Name: " + item.getName() + "\nDescription: " + item.getDescription()
                             + "\nStat Changes\nHealth: " + item.getItemHealth()
@@ -197,6 +198,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
             if (character.canEquipItem(item)) {
                 character.equipItem(item);
                 refreshSummary();
+                getController().playSound("equip.wav");
                 JOptionPane.showMessageDialog(null, item.getName() + " has been equipped!");
             } else {
                 JOptionPane.showMessageDialog(null,
@@ -256,6 +258,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         public void removeItem(Item item) {
             character.removeItem(item);
             refreshSummary();
+            getController().playSound("remove.wav");
             JOptionPane.showMessageDialog(null, item.getName() + " has been removed!");
         }
     }

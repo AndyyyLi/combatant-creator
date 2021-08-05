@@ -1,9 +1,6 @@
 package ui;
 
-import model.ArmourList;
 import model.Character;
-import model.SpellList;
-import model.WeaponList;
 import org.json.JSONException;
 import persistence.JsonLoader;
 import ui.tabs.ArmoursTab;
@@ -11,9 +8,14 @@ import ui.tabs.SpellsTab;
 import ui.tabs.SummaryTab;
 import ui.tabs.WeaponsTab;
 
+
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+
+import javafx.scene.media.AudioClip;
 
 /**
  * Combatant Creator Graphic User Interface
@@ -29,9 +31,7 @@ public class CombatantCreatorGUI extends JFrame {
     public static final String JSON_FILE = "./data/character.json";
 
     private Character character;
-
     private JsonLoader jsonLoader;
-
     private JTabbedPane tabBar;
 
     public CombatantCreatorGUI() {
@@ -89,6 +89,20 @@ public class CombatantCreatorGUI extends JFrame {
                         "Load Error", JOptionPane.WARNING_MESSAGE);
             }
         }
+        playSound("select.wav");
+    }
+
+    public void playSound(String filename) {
+        File f = new File("./sounds/" + filename);
+        try {
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Error playing sound",
+                    "Sound Error", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     public JTabbedPane getTabBar() {
@@ -98,4 +112,5 @@ public class CombatantCreatorGUI extends JFrame {
     public Character getCharacter() {
         return character;
     }
+
 }
