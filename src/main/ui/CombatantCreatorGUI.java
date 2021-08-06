@@ -8,14 +8,11 @@ import ui.tabs.SpellsTab;
 import ui.tabs.SummaryTab;
 import ui.tabs.WeaponsTab;
 
-
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-
-import javafx.scene.media.AudioClip;
 
 /**
  * Combatant Creator Graphic User Interface
@@ -51,6 +48,18 @@ public class CombatantCreatorGUI extends JFrame {
         setVisible(true);
     }
 
+    // GETTER METHODS
+    public JTabbedPane getTabBar() {
+        return tabBar;
+    }
+
+    public Character getCharacter() {
+        return character;
+    }
+
+
+    // MODIFIES: this
+    // EFFECTS: creates tab bar on the left containing tabs for weapons, spells, armours, and character summary
     public void loadTabs() {
         tabBar = new JTabbedPane();
         tabBar.setTabPlacement(JTabbedPane.LEFT);
@@ -70,6 +79,8 @@ public class CombatantCreatorGUI extends JFrame {
         tabBar.setTitleAt(SUMMARY_TAB_INDEX, "Character Summary");
     }
 
+    // EFFECTS: creates pop-up dialog asking if user wants to create new or load saved character
+    //          application window opens after user has selected an option
     public void startOptions() {
         String[] options = {"Create New Character", "Load Saved Character"};
         int selection = JOptionPane.showOptionDialog(null, "How would you like to start?",
@@ -92,8 +103,9 @@ public class CombatantCreatorGUI extends JFrame {
         playSound("select.wav");
     }
 
-    public void playSound(String filename) {
-        File f = new File("./sounds/" + filename);
+    // EFFECTS: plays given sound effect from file
+    public void playSound(String fileName) {
+        File f = new File("./sounds/" + fileName);
         try {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(f);
             Clip clip = AudioSystem.getClip();
@@ -103,14 +115,6 @@ public class CombatantCreatorGUI extends JFrame {
             JOptionPane.showMessageDialog(null,"Error playing sound",
                     "Sound Error", JOptionPane.WARNING_MESSAGE);
         }
-    }
-
-    public JTabbedPane getTabBar() {
-        return tabBar;
-    }
-
-    public Character getCharacter() {
-        return character;
     }
 
 }

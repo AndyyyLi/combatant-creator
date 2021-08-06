@@ -13,6 +13,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CategoryTab abstract superclass contains the layout and formatting of all equipment tabs
+ */
 public abstract class CategoryTab extends JPanel implements ListSelectionListener {
 
     private final CombatantCreatorGUI controller;
@@ -22,6 +25,8 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
     private ArmourList armourList = new ArmourList();
 
     private List<Item> itemList = new ArrayList<>();
+
+    private Character character;
 
     protected JList list;
     protected DefaultListModel listModel;
@@ -34,11 +39,14 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         this.controller = controller;
         setLayout(new GridLayout(3, 1));
 
+        character = controller.getCharacter();
+
         itemList.addAll(weaponList.getItemList());
         itemList.addAll(spellList.getItemList());
         itemList.addAll(armourList.getItemList());
     }
 
+    // MODIFIES: this
     // EFFECTS: creates and returns row with button included
     public JPanel formatButtonRow(JButton b) {
         b.setPreferredSize(new Dimension(200, 100));
@@ -50,10 +58,12 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         return p;
     }
 
+    // GETTER METHOD
     public CombatantCreatorGUI getController() {
         return controller;
     }
 
+    // MODIFIES: this
     // EFFECTS: creates category name at top of window
     public void placeCategoryName(String category) {
         JLabel categoryName = new JLabel(category, JLabel.CENTER);
@@ -61,6 +71,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         this.add(categoryName);
     }
 
+    // MODIFIES: this
     // EFFECTS: creates item list
     public void initializeItems(List<Item> items, ListSelectionListener listener) {
         listModel = new DefaultListModel();
@@ -77,19 +88,12 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         this.add(list);
     }
 
+    // MODIFIES: this
     // EFFECTS: creates info, equip and remove buttons
     public void placeButtons() {
-        infoButton = new JButton("Item Info");
-        infoButton.setActionCommand("Item Info");
-        infoButton.addActionListener(new InfoListener());
-
-        equipButton = new JButton("Equip Item");
-        equipButton.setActionCommand("Equip Item");
-        equipButton.addActionListener(new EquipListener());
-
-        removeButton = new JButton("Remove Item");
-        removeButton.setActionCommand("Remove Item");
-        removeButton.addActionListener(new RemoveListener());
+        infoButton = makeInfoButton();
+        equipButton = makeEquipButton();
+        removeButton = makeRemoveButton();
 
         JPanel buttonRow = formatButtonRow(infoButton);
         buttonRow.add(formatButtonRow(equipButton));
@@ -102,6 +106,153 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         this.add(buttonRow);
     }
 
+    // EFFECTS: helper method for making info button
+    public JButton makeInfoButton() {
+        JButton btn =  new JButton("Item Info");
+        btn.addActionListener(e -> {
+            int index = list.getSelectedIndex();
+            Object item = listModel.get(index);
+            String itemName = (String) item;
+
+            for (Item i : itemList) {
+                if (i.getName().equals(itemName)) {
+                    displayInfo(i);
+                    break;
+                }
+            }
+        });
+        return btn;
+    }
+
+    // EFFECTS: creates popup dialog showing an item's information
+    public void displayInfo(Item item) {
+        getController().playSound("info.wav");
+        JOptionPane.showMessageDialog(null,
+                "Name: " + item.getName() + "\nDescription: " + item.getDescription()
+                        + "\nStat Changes\nHealth: " + item.getItemHealth()
+                        + "\nEnergy: " + item.getItemEnergy()
+                        + "\nWeapon Damage: " + item.getItemWeaponDamage()
+                        + "\nSpell Damage: " + item.getItemSpellDamage()
+                        + "\nDefense: " + item.getItemDefense()
+                        + "\nSpeed: " + item.getItemSpeed(), "Item Info", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    // EFFECTS: helper method for making equip button
+    public JButton makeEquipButton() {
+        JButton btn = new JButton("Equip Item");
+        btn.addActionListener(e -> {
+            int index = list.getSelectedIndex();
+            Object item = listModel.get(index);
+            String itemName = (String) item;
+
+            for (Item i : itemList) {
+                if (i.getName().equals(itemName)) {
+                    if (i instanceof Weapon) {
+                        itemCompare(character.getCurrentWeapon(), i);
+                    } else if (i instanceof Spell) {
+                        itemCompare(character.getCurrentSpell(), i);
+                    } else {
+                        itemCompare(character.getCurrentArmour(), i);
+                    }
+                    break;
+                }
+            }
+        });
+        return btn;
+    }
+
+    // EFFECTS: equips item if character does not have an item of that category equipped,
+    //          else show dialog depending on whether another item is equipped or same item is equipped
+    public void itemCompare(Item current, Item replacement) {
+        if (current == null) {
+            equipItem(replacement);
+        } else if (current.getName().equals(replacement.getName())) {
+            JOptionPane.showMessageDialog(null, current.getName() + " is already equipped!",
+                    "Equip Error", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, current.getName() + " must be removed first!",
+                    "Equip Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    // MODIFIES: character
+    // EFFECTS: equip item onto character if possible, else show error dialog
+    public void equipItem(Item item) {
+        if (character.canEquipItem(item)) {
+            character.equipItem(item);
+            refreshSummary();
+            getController().playSound("equip.wav");
+            JOptionPane.showMessageDialog(null, item.getName() + " has been equipped!");
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    item.getName() + "'s stats are not compatible with character's current stats.",
+                    "Equip Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: helper method for making remove button
+    public JButton makeRemoveButton() {
+        JButton btn = new JButton("Remove Item");
+        btn.addActionListener(e -> {
+            int index = list.getSelectedIndex();
+            Object item = listModel.get(index);
+            String itemName = (String) item;
+
+            for (Item i : itemList) {
+                if (i.getName().equals(itemName)) {
+                    tryToRemove(i);
+                    break;
+                }
+            }
+        });
+        return btn;
+    }
+
+    // EFFECTS: compares character's equipped item with given item, removes only if they are the same,
+    //          else show error popup message
+    public void tryToRemove(Item item) {
+        if (item instanceof Weapon) {
+            if (character.getCurrentWeapon() == null
+                    || !character.getCurrentWeapon().getName().equals(item.getName())) {
+                removeError(item);
+            } else {
+                removeItem(item);
+            }
+        } else if (item instanceof Spell) {
+            if (character.getCurrentSpell() == null
+                    || !character.getCurrentSpell().getName().equals(item.getName())) {
+                removeError(item);
+            } else {
+                removeItem(item);
+            }
+        } else {
+            if (character.getCurrentArmour() == null
+                    || !character.getCurrentArmour().getName().equals(item.getName())) {
+                removeError(item);
+            } else {
+                removeItem(item);
+            }
+        }
+    }
+
+    // EFFECTS: creates error popup dialog
+    public void removeError(Item item) {
+        JOptionPane.showMessageDialog(null, item.getName() + " is not equipped!",
+                "Remove Error", JOptionPane.WARNING_MESSAGE);
+    }
+
+    // MODIFIES: character
+    // EFFECTS: removes item from character
+    public void removeItem(Item item) {
+        character.removeItem(item);
+        refreshSummary();
+        getController().playSound("remove.wav");
+        JOptionPane.showMessageDialog(null, item.getName() + " has been removed!");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: disables all buttons if nothing is selected, else all are enabled
     @Override
     public void valueChanged(ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
@@ -117,6 +268,8 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         }
     }
 
+    // MODIFIES: summary tab
+    // EFFECTS: reloads summary tab to update character's equipment and total stats
     public void refreshSummary() {
         JTabbedPane tabBar = getController().getTabBar();
         tabBar.remove(CombatantCreatorGUI.SUMMARY_TAB_INDEX);
@@ -126,140 +279,4 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         tabBar.repaint();
     }
 
-    public class InfoListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int index = list.getSelectedIndex();
-            Object item = listModel.get(index);
-            String itemName = (String) item;
-
-            for (Item i : itemList) {
-                if (i.getName().equals(itemName)) {
-                    displayInfo(i);
-                    break;
-                }
-            }
-        }
-
-        public void displayInfo(Item item) {
-            getController().playSound("info.wav");
-            JOptionPane.showMessageDialog(null,
-                    "Name: " + item.getName() + "\nDescription: " + item.getDescription()
-                            + "\nStat Changes\nHealth: " + item.getItemHealth()
-                            + "\nEnergy: " + item.getItemEnergy()
-                            + "\nWeapon Damage: " + item.getItemWeaponDamage()
-                            + "\nSpell Damage: " + item.getItemSpellDamage()
-                            + "\nDefense: " + item.getItemDefense()
-                            + "\nSpeed: " + item.getItemSpeed(), "Item Info", JOptionPane.PLAIN_MESSAGE);
-        }
-    }
-
-    public class EquipListener implements ActionListener {
-        Character character = getController().getCharacter();
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int index = list.getSelectedIndex();
-            Object item = listModel.get(index);
-            String itemName = (String) item;
-
-            for (Item i : itemList) {
-                if (i.getName().equals(itemName)) {
-                    tryToEquip(i);
-                    break;
-                }
-            }
-        }
-
-        public void tryToEquip(Item item) {
-            if (item instanceof Weapon) {
-                itemCompare(character.getCurrentWeapon(), item);
-            } else if (item instanceof Spell) {
-                itemCompare(character.getCurrentSpell(), item);
-            } else {
-                itemCompare(character.getCurrentArmour(), item);
-            }
-        }
-
-        public void itemCompare(Item current, Item replacement) {
-            if (current == null) {
-                equipItem(replacement);
-            } else if (current.getName().equals(replacement.getName())) {
-                JOptionPane.showMessageDialog(null, current.getName() + " is already equipped!",
-                        "Equip Error", JOptionPane.WARNING_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, current.getName() + " must be removed first!",
-                        "Equip Error", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-
-        public void equipItem(Item item) {
-            if (character.canEquipItem(item)) {
-                character.equipItem(item);
-                refreshSummary();
-                getController().playSound("equip.wav");
-                JOptionPane.showMessageDialog(null, item.getName() + " has been equipped!");
-            } else {
-                JOptionPane.showMessageDialog(null,
-                        item.getName() + "'s stats are not compatible with character's current stats.",
-                        "Equip Error", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }
-
-    public class RemoveListener implements ActionListener {
-        Character character = getController().getCharacter();
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int index = list.getSelectedIndex();
-            Object item = listModel.get(index);
-            String itemName = (String) item;
-
-            for (Item i : itemList) {
-                if (i.getName().equals(itemName)) {
-                    tryToRemove(i);
-                    break;
-                }
-            }
-        }
-
-        public void tryToRemove(Item item) {
-            if (item instanceof Weapon) {
-                if (character.getCurrentWeapon() == null
-                        || !character.getCurrentWeapon().getName().equals(item.getName())) {
-                    removeError(item);
-                } else {
-                    removeItem(item);
-                }
-            } else if (item instanceof Spell) {
-                if (character.getCurrentSpell() == null
-                        || !character.getCurrentSpell().getName().equals(item.getName())) {
-                    removeError(item);
-                } else {
-                    removeItem(item);
-                }
-            } else {
-                if (character.getCurrentArmour() == null
-                        || !character.getCurrentArmour().getName().equals(item.getName())) {
-                    removeError(item);
-                } else {
-                    removeItem(item);
-                }
-            }
-        }
-
-        public void removeError(Item item) {
-            JOptionPane.showMessageDialog(null, item.getName() + " is not equipped!",
-                    "Remove Error", JOptionPane.WARNING_MESSAGE);
-        }
-
-        public void removeItem(Item item) {
-            character.removeItem(item);
-            refreshSummary();
-            getController().playSound("remove.wav");
-            JOptionPane.showMessageDialog(null, item.getName() + " has been removed!");
-        }
-    }
 }

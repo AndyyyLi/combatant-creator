@@ -6,8 +6,6 @@ import ui.CombatantCreatorGUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 
 public class SummaryTab extends JPanel {
@@ -35,16 +33,21 @@ public class SummaryTab extends JPanel {
         placeOptions();
     }
 
+    // GETTER METHOD
     public CombatantCreatorGUI getController() {
         return controller;
     }
 
+    // MODIFIES: this
+    // EFFECTS: places character name at top of screen
     public void placeName() {
         JLabel characterName = new JLabel(character.getCharName(), JLabel.CENTER);
         characterName.setFont(characterName.getFont().deriveFont(64f));
         this.add(characterName);
     }
 
+    // MODIFIES: this
+    // EFFECTS: places character's equipment's names on screen
     public void placeEquipment() {
         equipment = new JPanel();
         equipment.setLayout(new GridLayout(3,1));
@@ -67,6 +70,7 @@ public class SummaryTab extends JPanel {
         this.add(equipment);
     }
 
+    // EFFECTS: if character has no weapon equipped, display "No Weapon Equipped", else show equipped weapon name
     public String weaponName() {
         String name;
         if (character.getCurrentWeapon() == null) {
@@ -77,6 +81,7 @@ public class SummaryTab extends JPanel {
         return name;
     }
 
+    // EFFECTS: if character has no spell equipped, display "No Spell Equipped", else show equipped spell name
     public String spellName() {
         String name;
         if (character.getCurrentSpell() == null) {
@@ -87,6 +92,7 @@ public class SummaryTab extends JPanel {
         return name;
     }
 
+    // EFFECTS: if character has no armour equipped, display "No Armour Equipped", else show equipped armour name
     public String armourName() {
         String name;
         if (character.getCurrentArmour() == null) {
@@ -97,6 +103,8 @@ public class SummaryTab extends JPanel {
         return name;
     }
 
+    // MODIFIES: this
+    // EFFECTS: places all of characters stats on screen
     public void placeStats() {
         JPanel totalStats = new JPanel();
         totalStats.setLayout(new GridLayout(2,1));
@@ -114,7 +122,8 @@ public class SummaryTab extends JPanel {
         this.add(totalStats);
     }
 
-    public JPanel makeStats(JPanel stats) {
+    // EFFECTS: creates all the stats labels
+    public void makeStats(JPanel stats) {
         JLabel health = new JLabel("Total Health: " + character.getTotalHealth());
         JLabel energy = new JLabel("Total Energy: " + character.getTotalEnergy());
         JLabel weapDmg = new JLabel("Total Weapon Damage: " + character.getTotalWeaponDamage());
@@ -135,26 +144,23 @@ public class SummaryTab extends JPanel {
         stats.add(spellDmg);
         stats.add(defense);
         stats.add(speed);
-
-        return stats;
     }
 
+    // MODIFIES: stat JLabels
+    // EFFECTS: sets JLabel font size
     public void setFontSize(JLabel stat) {
         stat.setFont(stat.getFont().deriveFont(18f));
     }
 
+    // MODIFIES: this
+    // EFFECTS: places option buttons at bottom of screen
     public void placeOptions() {
         options = new JPanel();
         options.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 50));
 
-        JButton name = makeOption("Change Name");
-        name.addActionListener(new NameChangeListener());
-
-        JButton save = makeOption("Save Character");
-        save.addActionListener(new SaveListener());
-
-        JButton finish = makeOption("Finish Game");
-        finish.addActionListener(new FinishGameListener());
+        JButton name = makeNameButton();
+        JButton save = makeSaveButton();
+        JButton finish = makeFinishButton();
 
         options.add(name);
         options.add(save);
@@ -163,28 +169,10 @@ public class SummaryTab extends JPanel {
         this.add(options);
     }
 
-    private JButton makeOption(String option) {
-        JButton optionBtn = new JButton(option);
-        optionBtn.setActionCommand(option);
-        optionBtn.setPreferredSize(new Dimension(200,80));
-        optionBtn.setFont(optionBtn.getFont().deriveFont(20f));
-        return optionBtn;
-    }
-
-    public void refreshTab() {
-        JTabbedPane tabBar = controller.getTabBar();
-        tabBar.remove(CombatantCreatorGUI.SUMMARY_TAB_INDEX);
-        tabBar.add(new SummaryTab(controller));
-        tabBar.setTitleAt(CombatantCreatorGUI.SUMMARY_TAB_INDEX, "Character Summary");
-        tabBar.revalidate();
-        tabBar.repaint();
-        tabBar.setSelectedIndex(CombatantCreatorGUI.SUMMARY_TAB_INDEX);
-    }
-
-    public class NameChangeListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    // EFFECTS: makes name button
+    private JButton makeNameButton() {
+        JButton btn = new JButton("Change Name");
+        btn.addActionListener(e -> {
             String name = JOptionPane.showInputDialog("Current name: " + character.getCharName()
                     + "\nEnter new name:");
             if (name != null) {
@@ -194,13 +182,16 @@ public class SummaryTab extends JPanel {
                 JOptionPane.showMessageDialog(null, "Your character is now named "
                         + character.getCharName());
             }
-        }
+        });
+        btn.setPreferredSize(new Dimension(200,80));
+        btn.setFont(btn.getFont().deriveFont(20f));
+        return btn;
     }
 
-    public class SaveListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    // EFFECTS: makes save button
+    private JButton makeSaveButton() {
+        JButton btn = new JButton("Save Character");
+        btn.addActionListener(e -> {
             try {
                 jsonSaver.open();
                 jsonSaver.save(character);
@@ -212,13 +203,16 @@ public class SummaryTab extends JPanel {
                 JOptionPane.showMessageDialog(null, "Cannot save to file: "
                         + CombatantCreatorGUI.JSON_FILE, "Save Error", JOptionPane.WARNING_MESSAGE);
             }
-        }
+        });
+        btn.setPreferredSize(new Dimension(200,80));
+        btn.setFont(btn.getFont().deriveFont(20f));
+        return btn;
     }
 
-    public class FinishGameListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    // EFFECTS: makes finish button
+    public JButton makeFinishButton() {
+        JButton btn = new JButton("Finish Game");
+        btn.addActionListener(e -> {
             int input = JOptionPane.showConfirmDialog(null, "Are you sure you're done?");
             if (input == 0) {
                 getController().playSound("finish.wav");
@@ -227,6 +221,21 @@ public class SummaryTab extends JPanel {
                         character.getCharName() + " is ready for battle!");
                 System.exit(0);
             }
-        }
+        });
+        btn.setPreferredSize(new Dimension(200,80));
+        btn.setFont(btn.getFont().deriveFont(20f));
+        return btn;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: refreshes tab to reload updated character
+    public void refreshTab() {
+        JTabbedPane tab = controller.getTabBar();
+        tab.remove(CombatantCreatorGUI.SUMMARY_TAB_INDEX);
+        tab.add(new SummaryTab(controller));
+        tab.setTitleAt(CombatantCreatorGUI.SUMMARY_TAB_INDEX, "Character Summary");
+        tab.revalidate();
+        tab.repaint();
+        tab.setSelectedIndex(CombatantCreatorGUI.SUMMARY_TAB_INDEX);
     }
 }

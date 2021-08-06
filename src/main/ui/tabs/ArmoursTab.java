@@ -3,6 +3,9 @@ package ui.tabs;
 import model.ArmourList;
 import ui.CombatantCreatorGUI;
 
+/**
+ * ArmoursTab subclass creates tab for selecting armour
+ */
 public class ArmoursTab extends CategoryTab {
 
     private ArmourList armours = new ArmourList();

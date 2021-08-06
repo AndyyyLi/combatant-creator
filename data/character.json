@@ -1,14 +1,6 @@
 {
-  "armourMaterial": "Super Steel",
-  "weapon": "Sword of the Void",
-  "spell": "Rabadon's Spellstrike",
-  "weaponEffect": "No Effect",
-  "name": "Andy",
-  "armourAdjust": 0,
-  "spellElement": "Normal",
-  "armourAbility": "None",
-  "weaponAdjust": 0,
-  "spellAdjust": 0,
-  "weaponIntensity": 0,
-  "armour": "Knight's Battle Armour"
+  "weapon": "None",
+  "spell": "None",
+  "name": "sad",
+  "armour": "None"
 }
