@@ -31,6 +31,8 @@ public class CombatantCreatorGUI extends JFrame {
     private JsonLoader jsonLoader;
     private JTabbedPane tabBar;
 
+    // creation of application frame based on SmartHomeUI starter
+
     public CombatantCreatorGUI() {
         super("Combatant Creator");
         setLayout(new BorderLayout());
@@ -57,6 +59,7 @@ public class CombatantCreatorGUI extends JFrame {
         return character;
     }
 
+    // tab bar implementation based on SmartHomeUI starter
 
     // MODIFIES: this
     // EFFECTS: creates tab bar on the left containing tabs for weapons, spells, armours, and character summary
@@ -81,6 +84,7 @@ public class CombatantCreatorGUI extends JFrame {
 
     // EFFECTS: creates pop-up dialog asking if user wants to create new or load saved character
     //          application window opens after user has selected an option
+    //          attempts to load saved file if selected, else returns error popup and proceeds with a new character
     public void startOptions() {
         String[] options = {"Create New Character", "Load Saved Character"};
         int selection = JOptionPane.showOptionDialog(null, "How would you like to start?",
@@ -103,11 +107,13 @@ public class CombatantCreatorGUI extends JFrame {
         playSound("select.wav");
     }
 
-    // EFFECTS: plays given sound effect from file
+    // playSound method based on this video: https://www.youtube.com/watch?v=SyZQVJiARTQ&ab_channel=BroCode
+
+    // EFFECTS: plays given sound effect from file, throw exception if sound file doesn't exist
     public void playSound(String fileName) {
-        File f = new File("./sounds/" + fileName);
+        File file = new File("./sounds/" + fileName);
         try {
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f);
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
             clip.start();

@@ -14,7 +14,7 @@ public class ArmourList extends Category {
 
     // armours in order of highest defense must be: armour2, armour1, armour3, in order for test class to pass
     private Armour armour1 = new Armour("Knight's Battle Armour",
-            "Old but always gold, enhances your spellcasting too!.",
+            "Old but always gold, enhances your spellcasting too!",
             150,80,0,0,75,0);
     private Armour armour2 = new Armour("Armour of the Ages", "Very protective, but lacks mobility.",
             300,0,0,0,135,-15);

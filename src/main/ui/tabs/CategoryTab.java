@@ -8,13 +8,12 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * CategoryTab abstract superclass contains the layout and formatting of all equipment tabs
+ * CategoryTab abstract superclass contains the layout and formatting of all equipment tabs, largely based on
+ * Tab abstract class from SmartHomeUI starter
  */
 public abstract class CategoryTab extends JPanel implements ListSelectionListener {
 
@@ -23,7 +22,6 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
     private WeaponList weaponList = new WeaponList();
     private SpellList spellList = new SpellList();
     private ArmourList armourList = new ArmourList();
-
     private List<Item> itemList = new ArrayList<>();
 
     private Character character;
@@ -46,6 +44,8 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         itemList.addAll(armourList.getItemList());
     }
 
+    // formatButtonRow method based on SmartHomeUI starter's method of the same name in the Tab class
+
     // MODIFIES: this
     // EFFECTS: creates and returns row with button included
     public JPanel formatButtonRow(JButton b) {
@@ -58,7 +58,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         return p;
     }
 
-    // GETTER METHOD
+    // GUI getter method
     public CombatantCreatorGUI getController() {
         return controller;
     }
@@ -70,6 +70,8 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         categoryName.setFont(categoryName.getFont().deriveFont(64f));
         this.add(categoryName);
     }
+
+    // initializeItems method based on ListDemoProject from the oracle.com website provided on edX
 
     // MODIFIES: this
     // EFFECTS: creates item list
@@ -106,9 +108,13 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         this.add(buttonRow);
     }
 
+    // all usages of addActionListener in make___Button methods based on SmartHomeUI starter
+
+    // MODIFIES: this
     // EFFECTS: helper method for making info button
     public JButton makeInfoButton() {
         JButton btn =  new JButton("Item Info");
+
         btn.addActionListener(e -> {
             int index = list.getSelectedIndex();
             Object item = listModel.get(index);
@@ -124,7 +130,8 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         return btn;
     }
 
-    // EFFECTS: creates popup dialog showing an item's information
+    // MODIFIES: this
+    // EFFECTS: creates popup dialog showing item's information
     public void displayInfo(Item item) {
         getController().playSound("info.wav");
         JOptionPane.showMessageDialog(null,
@@ -137,6 +144,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
                         + "\nSpeed: " + item.getItemSpeed(), "Item Info", JOptionPane.PLAIN_MESSAGE);
     }
 
+    // MODIFIES: this
     // EFFECTS: helper method for making equip button
     public JButton makeEquipButton() {
         JButton btn = new JButton("Equip Item");
@@ -176,7 +184,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
     }
 
     // MODIFIES: character
-    // EFFECTS: equip item onto character if possible, else show error dialog
+    // EFFECTS: equip item onto character if possible, else show equip error dialog
     public void equipItem(Item item) {
         if (character.canEquipItem(item)) {
             character.equipItem(item);
@@ -236,7 +244,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         }
     }
 
-    // EFFECTS: creates error popup dialog
+    // EFFECTS: creates item remove error popup dialog
     public void removeError(Item item) {
         JOptionPane.showMessageDialog(null, item.getName() + " is not equipped!",
                 "Remove Error", JOptionPane.WARNING_MESSAGE);
@@ -252,20 +260,12 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
     }
 
     // MODIFIES: this
-    // EFFECTS: disables all buttons if nothing is selected, else all are enabled
+    // EFFECTS: keeps the buttons clickable while user is selecting between the items
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        if (!e.getValueIsAdjusting()) {
-            if (list.getSelectedIndex() == -1) {
-                infoButton.setEnabled(false);
-                equipButton.setEnabled(false);
-                removeButton.setEnabled(false);
-            } else {
-                infoButton.setEnabled(true);
-                equipButton.setEnabled(true);
-                removeButton.setEnabled(true);
-            }
-        }
+        infoButton.setEnabled(true);
+        equipButton.setEnabled(true);
+        removeButton.setEnabled(true);
     }
 
     // MODIFIES: summary tab

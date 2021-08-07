@@ -8,6 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 
+/**
+ * SummaryTab class creates the tab for the character's summary, and also contains the buttons to rename character,
+ * save character, and finish game (which closes the application)
+ */
 public class SummaryTab extends JPanel {
 
     private final CombatantCreatorGUI controller;
@@ -33,7 +37,7 @@ public class SummaryTab extends JPanel {
         placeOptions();
     }
 
-    // GETTER METHOD
+    // GUI getter method
     public CombatantCreatorGUI getController() {
         return controller;
     }
@@ -70,7 +74,7 @@ public class SummaryTab extends JPanel {
         this.add(equipment);
     }
 
-    // EFFECTS: if character has no weapon equipped, display "No Weapon Equipped", else show equipped weapon name
+    // EFFECTS: if character has no weapon equipped, return "No Weapon Equipped", else return equipped weapon name
     public String weaponName() {
         String name;
         if (character.getCurrentWeapon() == null) {
@@ -81,7 +85,7 @@ public class SummaryTab extends JPanel {
         return name;
     }
 
-    // EFFECTS: if character has no spell equipped, display "No Spell Equipped", else show equipped spell name
+    // EFFECTS: if character has no spell equipped, return "No Spell Equipped", else return equipped spell name
     public String spellName() {
         String name;
         if (character.getCurrentSpell() == null) {
@@ -92,7 +96,7 @@ public class SummaryTab extends JPanel {
         return name;
     }
 
-    // EFFECTS: if character has no armour equipped, display "No Armour Equipped", else show equipped armour name
+    // EFFECTS: if character has no armour equipped, return "No Armour Equipped", else return equipped armour name
     public String armourName() {
         String name;
         if (character.getCurrentArmour() == null) {
@@ -122,7 +126,7 @@ public class SummaryTab extends JPanel {
         this.add(totalStats);
     }
 
-    // EFFECTS: creates all the stats labels
+    // EFFECTS: helper method that creates all the stats labels
     public void makeStats(JPanel stats) {
         JLabel health = new JLabel("Total Health: " + character.getTotalHealth());
         JLabel energy = new JLabel("Total Energy: " + character.getTotalEnergy());
@@ -169,13 +173,18 @@ public class SummaryTab extends JPanel {
         this.add(options);
     }
 
-    // EFFECTS: makes name button
+    // MODIFIES: this
+    // EFFECTS: makes name button that prompts user to change their character's name
     private JButton makeNameButton() {
         JButton btn = new JButton("Change Name");
         btn.addActionListener(e -> {
             String name = JOptionPane.showInputDialog("Current name: " + character.getCharName()
                     + "\nEnter new name:");
+
             if (name != null) {
+                while (name.equals("")) {
+                    name = JOptionPane.showInputDialog("Name cannot be empty! Please try again.\nEnter new name:");
+                }
                 character.setName(name);
                 refreshTab();
                 getController().playSound("name.wav");
@@ -188,7 +197,8 @@ public class SummaryTab extends JPanel {
         return btn;
     }
 
-    // EFFECTS: makes save button
+    // MODIFIES: this
+    // EFFECTS: makes save button that saves character's name and equipment, shows save error dialog if unable to save
     private JButton makeSaveButton() {
         JButton btn = new JButton("Save Character");
         btn.addActionListener(e -> {
@@ -209,7 +219,9 @@ public class SummaryTab extends JPanel {
         return btn;
     }
 
-    // EFFECTS: makes finish button
+    // MODIFIES: this
+    // EFFECTS: makes finish button which confirms that user wants to finish then if so, displays finish popup dialog
+    //          and exits application
     public JButton makeFinishButton() {
         JButton btn = new JButton("Finish Game");
         btn.addActionListener(e -> {
