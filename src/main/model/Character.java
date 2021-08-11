@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.CannotRemoveItemException;
+import exceptions.InvalidNameException;
 import org.json.JSONObject;
 import persistence.Savable;
 
@@ -80,10 +82,12 @@ public class Character implements Savable {
     }
 
 
-    // REQUIRES: name must be at least 1 character long
     // MODIFIES: this
     // EFFECTS: sets character's name as given name
-    public void setName(String name) {
+    public void setName(String name) throws InvalidNameException {
+        if (name == null || name.length() == 0) {
+            throw new InvalidNameException();
+        }
         this.charName = name;
     }
 
@@ -132,17 +136,10 @@ public class Character implements Savable {
                 && finalSpeed > 0);
     }
 
-    // REQUIRES: character has this item equipped
     // MODIFIES: this
-    // EFFECTS: removes currently equipped item from character
-    public void removeItem(Item item) {
-        if (item instanceof Weapon) {
-            this.currentWeapon = null;
-        } else if (item instanceof Spell) {
-            this.currentSpell = null;
-        } else {
-            this.currentArmour = null;
-        }
+    // EFFECTS: removes currently equipped item from character if possible, else throws exception
+    public void removeItem(Item item) throws CannotRemoveItemException {
+        tryToRemove(item);
 
         this.totalHealth -= item.getItemHealth();
         this.totalEnergy -= item.getItemEnergy();
@@ -150,6 +147,30 @@ public class Character implements Savable {
         this.totalSpellDamage -= item.getItemSpellDamage();
         this.totalDefense -= item.getItemDefense();
         this.totalSpeed -= item.getItemSpeed();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: if given item is equipped, remove the item from character, else throw exception
+    public void tryToRemove(Item item) throws CannotRemoveItemException {
+        if (item instanceof Weapon) {
+            if (this.currentWeapon == null || !this.currentWeapon.getName().equals(item.getName())) {
+                throw new CannotRemoveItemException();
+            } else {
+                this.currentWeapon = null;
+            }
+        } else if (item instanceof Spell) {
+            if (this.currentSpell == null || !this.currentSpell.getName().equals(item.getName())) {
+                throw new CannotRemoveItemException();
+            } else {
+                this.currentSpell = null;
+            }
+        } else {
+            if (this.currentArmour == null || !this.currentArmour.getName().equals(item.getName())) {
+                throw new CannotRemoveItemException();
+            } else {
+                this.currentArmour = null;
+            }
+        }
     }
 
     // EFFECTS: creates JSON Object out of character and equipped items

@@ -41,3 +41,15 @@ character designing application myself!
 - As a user, I want to be able to select an item to learn more about it (i.e. its description and stat changes)
 - As a user, I want to be able to save my current character to file, including name, equipment, and stats
 - As a user, I want to be able to load my saved character from file or create a new one when I start the game
+
+## Phase 4: Task 2
+
+I've adjusted the implementation of the Character class to be robust by changing two methods to potentially throw an
+exception. The first robust method is setName(), which will throw an InvalidNameException if the passed in string is 
+empty or null, and this is tested with the tests testSetNameNoExceptionThrown() and testSetNameExceptionThrown() in the
+CharacterTest class. The other robust method is removeItem(), specifically its helper method tryToRemove(), which can
+throw a CannotRemoveItemException if the character does not have the passed in item equipped (this exception is also 
+thrown by removeItem()), and this covers both the case of having not equipped anything and having equipped a different 
+item of the same category. These exceptions are tested in the CharacterTest class with the tests 
+testEquipThenRemoveItemsNoExceptionThrown(), testRemoveNonEquippedItemExceptionThrown() and 
+testRemoveAnotherItemExceptionThrown().

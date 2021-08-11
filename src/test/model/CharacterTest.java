@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.CannotRemoveItemException;
+import exceptions.InvalidNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -145,15 +147,31 @@ public class CharacterTest {
     }
 
     @Test
-    public void testSetName() {
+    public void testSetNameNoExceptionThrown() {
         String testName = "Jason";
 
-        testCharacter.setName(testName);
-        assertEquals(testName, testCharacter.getCharName());
+        try {
+            testCharacter.setName(testName);
+            assertEquals(testName, testCharacter.getCharName());
+        } catch (InvalidNameException e) {
+            fail("Unexpected invalid name exception!");
+        }
     }
 
     @Test
-    public void testEquipThenRemoveItemWithStats() {
+    public void testSetNameExceptionThrown() {
+        try {
+            testCharacter.setName("");
+            fail("Method should not have executed!");
+        } catch (InvalidNameException e) {
+            // expected
+        }
+
+        assertEquals("Your combatant", testCharacter.getCharName());
+    }
+
+    @Test
+    public void testEquipThenRemoveItemsNoExceptionThrown() {
         testCharacter.equipItem(testWeapon);
         testCharacter.equipItem(testSpell);
         testCharacter.equipItem(testArmour);
@@ -162,9 +180,13 @@ public class CharacterTest {
         assertEquals(testSpell, testCharacter.getCurrentSpell());
         assertEquals(testArmour, testCharacter.getCurrentArmour());
 
-        testCharacter.removeItem(testWeapon);
-        testCharacter.removeItem(testSpell);
-        testCharacter.removeItem(testArmour);
+        try {
+            testCharacter.removeItem(testWeapon);
+            testCharacter.removeItem(testSpell);
+            testCharacter.removeItem(testArmour);
+        } catch (CannotRemoveItemException e) {
+            fail("Unexpected caught exception!");
+        }
 
         assertEquals(null, testCharacter.getCurrentWeapon());
         assertEquals(null, testCharacter.getCurrentSpell());
@@ -176,6 +198,31 @@ public class CharacterTest {
         assertEquals(0, testCharacter.getTotalSpellDamage());
         assertEquals(0, testCharacter.getTotalDefense());
         assertEquals(25, testCharacter.getTotalSpeed());
+    }
+
+    @Test
+    public void testRemoveNonEquippedItemExceptionThrown() {
+        try {
+            testCharacter.removeItem(testWeapon);
+            fail("Method should not execute!");
+        } catch (CannotRemoveItemException e) {
+            // expected
+        }
+        assertEquals(null, testCharacter.getCurrentWeapon());
+    }
+
+    @Test
+    public void testRemoveAnotherItemExceptionThrown() {
+        Spell anotherSpell = new Spell("Unexpected Spell", "I'm not supposed to be here!",
+                0,0,0,0,0,0);
+        try {
+            testCharacter.equipItem(testSpell);
+            testCharacter.removeItem(anotherSpell);
+            fail("Method should not execute!");
+        } catch (CannotRemoveItemException e) {
+            // expected
+        }
+        assertEquals(testSpell, testCharacter.getCurrentSpell());
     }
 
 }

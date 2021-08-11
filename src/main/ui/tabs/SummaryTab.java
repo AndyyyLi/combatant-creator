@@ -1,5 +1,6 @@
 package ui.tabs;
 
+import exceptions.InvalidNameException;
 import model.Character;
 import persistence.JsonSaver;
 import ui.CombatantCreatorGUI;
@@ -182,14 +183,19 @@ public class SummaryTab extends JPanel {
                     + "\nEnter new name:");
 
             if (name != null) {
-                while (name.equals("")) {
-                    name = JOptionPane.showInputDialog("Name cannot be empty! Please try again.\nEnter new name:");
+                while (name != null) {
+                    try {
+                        character.setName(name);
+                        refreshTab();
+                        getController().playSound("name.wav");
+                        JOptionPane.showMessageDialog(null, "Your character is now named "
+                                + character.getCharName());
+                        break;
+                    } catch (InvalidNameException invalidNameException) {
+                        name = JOptionPane.showInputDialog("Name cannot be empty! Please try again."
+                                + "\nEnter new name:");
+                    }
                 }
-                character.setName(name);
-                refreshTab();
-                getController().playSound("name.wav");
-                JOptionPane.showMessageDialog(null, "Your character is now named "
-                        + character.getCharName());
             }
         });
         btn.setPreferredSize(new Dimension(200,80));

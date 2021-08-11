@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.InvalidNameException;
 import model.*;
 import model.Character;
 import org.junit.jupiter.api.Test;
@@ -107,6 +108,8 @@ public class JsonSaverTest extends JsonItemTest {
             assertEquals(365, character.getTotalSpeed());
         } catch (IOException e) {
             fail("File not found!");
+        } catch (InvalidNameException ine) {
+            fail("Unexpected invalid name exception");
         }
     }
 }

@@ -1,5 +1,6 @@
 package ui.tabs;
 
+import exceptions.CannotRemoveItemException;
 import model.*;
 import model.Character;
 import ui.CombatantCreatorGUI;
@@ -220,43 +221,15 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
     // EFFECTS: compares character's equipped item with given item, removes only if they are the same,
     //          else show error popup message
     public void tryToRemove(Item item) {
-        if (item instanceof Weapon) {
-            if (character.getCurrentWeapon() == null
-                    || !character.getCurrentWeapon().getName().equals(item.getName())) {
-                removeError(item);
-            } else {
-                removeItem(item);
-            }
-        } else if (item instanceof Spell) {
-            if (character.getCurrentSpell() == null
-                    || !character.getCurrentSpell().getName().equals(item.getName())) {
-                removeError(item);
-            } else {
-                removeItem(item);
-            }
-        } else {
-            if (character.getCurrentArmour() == null
-                    || !character.getCurrentArmour().getName().equals(item.getName())) {
-                removeError(item);
-            } else {
-                removeItem(item);
-            }
+        try {
+            character.removeItem(item);
+            refreshSummary();
+            getController().playSound("remove.wav");
+            JOptionPane.showMessageDialog(null, item.getName() + " has been removed!");
+        } catch (CannotRemoveItemException e) {
+            JOptionPane.showMessageDialog(null, item.getName() + " is not equipped!",
+                    "Remove Error", JOptionPane.WARNING_MESSAGE);
         }
-    }
-
-    // EFFECTS: creates item remove error popup dialog
-    public void removeError(Item item) {
-        JOptionPane.showMessageDialog(null, item.getName() + " is not equipped!",
-                "Remove Error", JOptionPane.WARNING_MESSAGE);
-    }
-
-    // MODIFIES: character
-    // EFFECTS: removes item from character
-    public void removeItem(Item item) {
-        character.removeItem(item);
-        refreshSummary();
-        getController().playSound("remove.wav");
-        JOptionPane.showMessageDialog(null, item.getName() + " has been removed!");
     }
 
     // MODIFIES: this

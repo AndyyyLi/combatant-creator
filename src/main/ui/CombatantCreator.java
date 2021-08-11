@@ -1,5 +1,7 @@
 package ui;
 
+import exceptions.CannotRemoveItemException;
+import exceptions.InvalidNameException;
 import model.*;
 import model.Character;
 import org.json.JSONException;
@@ -241,7 +243,11 @@ public class CombatantCreator {
             name = input.next();
         }
 
-        character.setName(name);
+        try {
+            character.setName(name);
+        } catch (InvalidNameException e) {
+            System.err.println("Name setting error.");
+        }
 
         continuePickingName();
 
@@ -264,19 +270,27 @@ public class CombatantCreator {
             }
 
             if (nextWord.equals("yes")) {
-                System.out.println("Enter next part of name:");
-                nextWord = input.next();
-
-                while (nextWord.length() == 0) {
-                    System.out.println("\nWord must be at least one character long!");
-                    nextWord = input.next();
-                }
-
-                character.setName(currentName + " " + nextWord);
+                inputNextWord(currentName);
                 currentName = character.getCharName();
             } else {
                 keepNaming = false;
             }
+        }
+    }
+
+    public void inputNextWord(String currentName) {
+        System.out.println("Enter next part of name:");
+        String nextWord = input.next();
+
+        while (nextWord.length() == 0) {
+            System.out.println("\nWord must be at least one character long!");
+            nextWord = input.next();
+        }
+
+        try {
+            character.setName(currentName + " " + nextWord);
+        } catch (InvalidNameException e) {
+            System.err.println("Name setting error.");
         }
     }
 
@@ -642,12 +656,11 @@ public class CombatantCreator {
     // EFFECTS: removes item from character if equipped
     public void removeSelectedItem(Item item) {
         System.out.println("\n");
-        if (character.getCurrentWeapon() == item || character.getCurrentSpell() == item
-                || character.getCurrentArmour() == item) {
+        try {
             character.removeItem(item);
             System.out.println(item.getName() + " has been removed!");
-        } else {
-            System.out.println(item.getName() + " is not equipped, cannot remove!");
+        } catch (CannotRemoveItemException e) {
+            System.err.println(item.getName() + " is not equipped, cannot remove!");
         }
         itemOptions(item);
     }

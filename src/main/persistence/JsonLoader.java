@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import exceptions.InvalidNameException;
 import model.*;
 import model.Character;
 import org.json.*;
@@ -64,7 +65,12 @@ public class JsonLoader {
         String charName = jsonObject.getString("name");
 
         Character character = new Character();
-        character.setName(charName);
+
+        try {
+            character.setName(charName);
+        } catch (InvalidNameException e) {
+            e.printStackTrace();
+        }
 
         if (!jsonObject.getString("weapon").equals("None")) {
             addWeapon(character, jsonObject);
