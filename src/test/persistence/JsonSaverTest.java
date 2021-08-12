@@ -47,6 +47,8 @@ public class JsonSaverTest extends JsonItemTest {
             assertEquals(25, defaultCharacter.getTotalSpeed());
         } catch (IOException e) {
             fail("File not found!");
+        } catch (InvalidNameException e) {
+            fail("Unexpected exception!");
         }
     }
 

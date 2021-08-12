@@ -726,6 +726,8 @@ public class CombatantCreator {
             System.out.println("Load error from file: " + JSON_FILE);
         } catch (JSONException e) {
             System.out.println("No character saved! Creating new character...");
+        } catch (InvalidNameException e) {
+            System.err.println("Saved character has no name! Creating new character...");
         }
     }
 

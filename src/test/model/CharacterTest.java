@@ -159,9 +159,21 @@ public class CharacterTest {
     }
 
     @Test
-    public void testSetNameExceptionThrown() {
+    public void testSetEmptyNameExceptionThrown() {
         try {
             testCharacter.setName("");
+            fail("Method should not have executed!");
+        } catch (InvalidNameException e) {
+            // expected
+        }
+
+        assertEquals("Your combatant", testCharacter.getCharName());
+    }
+
+    @Test
+    public void testSetNullNameExceptionThrown() {
+        try {
+            testCharacter.setName(null);
             fail("Method should not have executed!");
         } catch (InvalidNameException e) {
             // expected
@@ -201,7 +213,7 @@ public class CharacterTest {
     }
 
     @Test
-    public void testRemoveNonEquippedItemExceptionThrown() {
+    public void testRemoveNonEquippedWeaponExceptionThrown() {
         try {
             testCharacter.removeItem(testWeapon);
             fail("Method should not execute!");
@@ -212,7 +224,43 @@ public class CharacterTest {
     }
 
     @Test
-    public void testRemoveAnotherItemExceptionThrown() {
+    public void testRemoveNonEquippedSpellExceptionThrown() {
+        try {
+            testCharacter.removeItem(testSpell);
+            fail("Method should not execute!");
+        } catch (CannotRemoveItemException e) {
+            // expected
+        }
+        assertEquals(null, testCharacter.getCurrentSpell());
+    }
+
+    @Test
+    public void testRemoveNonEquippedArmourExceptionThrown() {
+        try {
+            testCharacter.removeItem(testArmour);
+            fail("Method should not execute!");
+        } catch (CannotRemoveItemException e) {
+            // expected
+        }
+        assertEquals(null, testCharacter.getCurrentArmour());
+    }
+
+    @Test
+    public void testRemoveAnotherWeaponExceptionThrown() {
+        Weapon anotherWeapon = new Weapon("Unexpected Weapon", "I'm not supposed to be here!",
+                0,0,0,0,0,0);
+        try {
+            testCharacter.equipItem(testWeapon);
+            testCharacter.removeItem(anotherWeapon);
+            fail("Method should not execute!");
+        } catch (CannotRemoveItemException e) {
+            // expected
+        }
+        assertEquals(testWeapon, testCharacter.getCurrentWeapon());
+    }
+
+    @Test
+    public void testRemoveAnotherSpellExceptionThrown() {
         Spell anotherSpell = new Spell("Unexpected Spell", "I'm not supposed to be here!",
                 0,0,0,0,0,0);
         try {
@@ -223,6 +271,20 @@ public class CharacterTest {
             // expected
         }
         assertEquals(testSpell, testCharacter.getCurrentSpell());
+    }
+
+    @Test
+    public void testRemoveAnotherArmourExceptionThrown() {
+        Armour anotherArmour = new Armour("Unexpected Armour", "I'm not supposed to be here!",
+                0,0,0,0,0,0);
+        try {
+            testCharacter.equipItem(testArmour);
+            testCharacter.removeItem(anotherArmour);
+            fail("Method should not execute!");
+        } catch (CannotRemoveItemException e) {
+            // expected
+        }
+        assertEquals(testArmour, testCharacter.getCurrentArmour());
     }
 
 }

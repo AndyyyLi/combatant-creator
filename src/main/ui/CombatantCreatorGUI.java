@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.InvalidNameException;
 import model.Character;
 import org.json.JSONException;
 import persistence.JsonLoader;
@@ -101,6 +102,10 @@ public class CombatantCreatorGUI extends JFrame {
             } catch (JSONException e) {
                 JOptionPane.showMessageDialog(null,
                         "No character saved! Creating new character...",
+                        "Load Error", JOptionPane.WARNING_MESSAGE);
+            } catch (InvalidNameException e) {
+                JOptionPane.showMessageDialog(null,
+                        "Saved character has no name! Creating new character...",
                         "Load Error", JOptionPane.WARNING_MESSAGE);
             }
         }

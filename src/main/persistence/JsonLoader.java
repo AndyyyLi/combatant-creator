@@ -43,7 +43,7 @@ public class JsonLoader {
 
     // EFFECTS: loads character from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public Character load() throws IOException {
+    public Character load() throws IOException, InvalidNameException {
         String jsonData = loadFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseCharacter(jsonObject);
@@ -61,16 +61,14 @@ public class JsonLoader {
     }
 
     // EFFECTS: parses JSON object to character and returns character
-    public Character parseCharacter(JSONObject jsonObject) {
+    public Character parseCharacter(JSONObject jsonObject) throws InvalidNameException {
         String charName = jsonObject.getString("name");
 
         Character character = new Character();
 
-        try {
-            character.setName(charName);
-        } catch (InvalidNameException e) {
-            e.printStackTrace();
-        }
+
+        character.setName(charName);
+
 
         if (!jsonObject.getString("weapon").equals("None")) {
             addWeapon(character, jsonObject);

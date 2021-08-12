@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.InvalidNameException;
 import model.*;
 import model.Character;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,8 @@ public class JsonLoaderTest extends JsonItemTest {
             fail("Not supposed to execute!");
         } catch (IOException e) {
             // expected!
+        } catch (InvalidNameException e) {
+            fail("Wrong exception caught!");
         }
     }
 
@@ -39,6 +42,8 @@ public class JsonLoaderTest extends JsonItemTest {
             assertEquals(25, character.getTotalSpeed());
         } catch (IOException e) {
             fail("File not found!");
+        } catch (InvalidNameException e) {
+            fail("Unexpected exception!");
         }
     }
 
@@ -72,6 +77,8 @@ public class JsonLoaderTest extends JsonItemTest {
             assertEquals(365, character.getTotalSpeed());
         } catch (IOException e) {
             fail("File not found!");
+        } catch (InvalidNameException e) {
+            fail("Unexpected exception!");
         }
     }
 }
