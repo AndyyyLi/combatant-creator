@@ -10,7 +10,7 @@ public class Armour extends Item {
     // material can be Super Steel (default), Ice Diamond, or Magma Obsidian
     private String material;
 
-    // defensive ability can be No Ability (default), Rapid Regen, Shockback, or Nimble Rush
+    // defensive ability can be None (default), Rapid Regen, Shockback, or Nimble Rush
     private String defensiveAbility;
 
     public Armour(String name, String description, int health, int energy, int weaponDamage, int spellDamage,

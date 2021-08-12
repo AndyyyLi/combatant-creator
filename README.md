@@ -53,3 +53,31 @@ thrown by removeItem()), and this covers both the case of having not equipped an
 item of the same category. These exceptions are tested in the CharacterTest class with the tests 
 testEquipThenRemoveItemsNoExceptionThrown(), testRemoveNonEquippedItemExceptionThrown() and 
 testRemoveAnotherItemExceptionThrown().
+
+## Phase 4: Task 3
+
+- I can make WeaponList, SpellList, and ArmourList contain a list of their respective item subtype rather than have
+them all have a list of items (i.e. WeaponList would contain a List\<Weapon> instead). 
+  - This way the category subclasses do not need to have an association with Item, and I may also modify Category's 
+    List\<Item> field in order to accomplish this.
+  
+- The abstract CategoryTab class can be refactored to not have associations with Item and the category lists. Instead I
+can implement methods in each specific tab subclass which will be called respectively based on what type of item is
+  changing states due to the buttons. 
+  - This can also make the process of identifying the passed in item more efficient because otherwise
+  the compiler traverses through an ArrayList of ALL the items every time it needs to find a specific item, which will 
+    be slow if the list gets very long. I could also change the List to a Set, but I think breaking down the items into 
+    item types first will be faster because it will essentially remove two thirds of the entire collection before the
+    searching even starts.
+    - There might also be some equals and hashcode overriding for the item comparisons.
+  
+- I can change the JsonLoader class to not have a dependency relationship with Character by making the method take in
+a character, modify that character, and return it at the end of the method.
+  
+- CombatantCreator does not need to have an association with Category, the Category field can be put inside the
+Category class or its subclasses instead.
+  
+- I can also refactor the arrange methods of the Category subclasses such that the method structure is implemented in 
+  Category, and the subclasses can call the method in the superclass with the appropriate parameters (this is not 
+  directly related to the UML diagram but it's something I noticed when looking over my code)
+  
