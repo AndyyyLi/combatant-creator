@@ -19,7 +19,7 @@ public class SpellTest {
 
     @BeforeEach
     public void setUp() {
-        testSpell = new Spell(name, description, health, energy, weapDmg, spellDmg, defense, speed);
+        testSpell = new Spell(name, description, health, energy, weapDmg, spellDmg, defense, speed, null);
     }
 
     @Test

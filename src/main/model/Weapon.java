@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.*;
+
 /**
  * Weapon is a type of Item which mainly provides stat changes to weapon damage and speed, and also include
  * exclusive options to add a hit effect and choose the effect's intensity, which varies per effect
@@ -15,8 +17,8 @@ public class Weapon extends Item {
     private int effectIntensity;
 
     public Weapon(String name, String description, int health, int energy, int weaponDamage, int spellDamage,
-                  int defense, int speed) {
-        super(name, description, health, energy, weaponDamage, spellDamage, defense, speed);
+                  int defense, int speed, ImageIcon img) {
+        super(name, description, health, energy, weaponDamage, spellDamage, defense, speed, img);
         hitEffect = "No Effect";
         effectIntensity = 0;
     }

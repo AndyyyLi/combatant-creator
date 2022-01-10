@@ -14,11 +14,11 @@ public class CategoryTest {
 
     private List<Item> listOfSomeItems;
     private Item item1 = new Item("Item 1", "First item.",
-            0,0,0,0,0,0);
+            0,0,0,0,0,0, null);
     private Item item2 = new Item("Item 2", "Second item.",
-            50,50,50,50,50,50);
+            50,50,50,50,50,50, null);
     private Item item3 = new Item("Item 3", "Third item.",
-            100,100,100,100,100,100);
+            100,100,100,100,100,100, null);
 
     @BeforeEach
     public void setUp() {

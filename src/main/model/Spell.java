@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.*;
+
 /**
  * Spell is a type of Item which mainly provides stat changes to energy and spell damage, and also include
  * exclusive options to choose their spell's element type
@@ -11,8 +13,8 @@ public class Spell extends Item {
     private String element;
 
     public Spell(String name, String description, int health, int energy, int weaponDamage, int spellDamage,
-                 int defense, int speed) {
-        super(name, description, health, energy, weaponDamage, spellDamage, defense, speed);
+                 int defense, int speed, ImageIcon img) {
+        super(name, description, health, energy, weaponDamage, spellDamage, defense, speed, img);
         element = "Normal";
     }
 

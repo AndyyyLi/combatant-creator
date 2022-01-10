@@ -1,7 +1,12 @@
 package ui.tabs;
 
+import exceptions.CannotRemoveItemException;
 import exceptions.InvalidNameException;
+import jdk.nashorn.internal.scripts.JO;
+import model.Armour;
 import model.Character;
+import model.Spell;
+import model.Weapon;
 import persistence.JsonSaver;
 import ui.CombatantCreatorGUI;
 
@@ -78,10 +83,16 @@ public class SummaryTab extends JPanel {
     // EFFECTS: if character has no weapon equipped, return "No Weapon Equipped", else return equipped weapon name
     public String weaponName() {
         String name;
-        if (character.getCurrentWeapon() == null) {
+        Weapon weapon = character.getCurrentWeapon();
+        if (weapon == null) {
             name = "No Weapon Equipped";
         } else {
-            name = "Current Weapon: " + character.getCurrentWeapon().getName();
+            if (weapon.getHitEffect().equals("No Effect")) {
+                name = "Weapon: " + weapon.getName();
+            } else {
+                name = "Weapon: " + weapon.getName() + " (" + weapon.getHitEffect() + " " +
+                        weapon.getEffectIntensity() + ")";
+            }
         }
         return name;
     }
@@ -89,10 +100,15 @@ public class SummaryTab extends JPanel {
     // EFFECTS: if character has no spell equipped, return "No Spell Equipped", else return equipped spell name
     public String spellName() {
         String name;
-        if (character.getCurrentSpell() == null) {
+        Spell spell = character.getCurrentSpell();
+        if (spell == null) {
             name = "No Spell Equipped";
         } else {
-            name = "Current Spell: " + character.getCurrentSpell().getName();
+            if (spell.getElement().equals("Normal")) {
+                name = "Spell: " + spell.getName();
+            } else {
+                name = "Spell: " + spell.getName() + " (" + spell.getElement() + ")";
+            }
         }
         return name;
     }
@@ -100,10 +116,16 @@ public class SummaryTab extends JPanel {
     // EFFECTS: if character has no armour equipped, return "No Armour Equipped", else return equipped armour name
     public String armourName() {
         String name;
-        if (character.getCurrentArmour() == null) {
+        Armour armour = character.getCurrentArmour();
+        if (armour == null) {
             name = "No Armour Equipped";
         } else {
-            name = "Current Armour: " + character.getCurrentArmour().getName();
+            if (armour.getDefensiveAbility().equals("None")) {
+                name = "Armour: " + armour.getName() + " (" + armour.getMaterial() + ") ";
+            } else {
+                name = "Armour: " + armour.getName() + " (" + armour.getMaterial() + ", "
+                        + armour.getDefensiveAbility() + ")";
+            }
         }
         return name;
     }
@@ -165,10 +187,12 @@ public class SummaryTab extends JPanel {
 
         JButton name = makeNameButton();
         JButton save = makeSaveButton();
+        JButton reset = makeResetButton();
         JButton finish = makeFinishButton();
 
         options.add(name);
         options.add(save);
+        options.add(reset);
         options.add(finish);
 
         this.add(options);
@@ -226,17 +250,73 @@ public class SummaryTab extends JPanel {
     }
 
     // MODIFIES: this
+    // EFFECTS: makes reset button which confirms that user wants to reset their character,
+    //          and if so, unequips all currently equipped items
+    private JButton makeResetButton() {
+        JButton btn = new JButton("Reset Character");
+        btn.addActionListener(e -> {
+            int input = JOptionPane.showOptionDialog(null,
+                    "Are you sure you want to unequip all items from " + character.getCharName() + "?",
+                    "Confirm Reset", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null,null,null);
+            if (input == 0) {
+                Weapon weapon = character.getCurrentWeapon();
+                Spell spell = character.getCurrentSpell();
+                Armour armour = character.getCurrentArmour();
+                try {
+                    if (character.getCurrentWeapon() != null) {
+                        character.removeItem(weapon);
+                    }
+                    if (character.getCurrentSpell() != null) {
+                        character.removeItem(spell);
+                    }
+                    if (character.getCurrentArmour() != null) {
+                        character.removeItem(armour);
+                    }
+                    refreshSummary();
+                    getController().playSound("reset.wav");
+                    JOptionPane.showMessageDialog(null,
+                            character.getCharName() + " has been reset!", "Reset Complete",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } catch (CannotRemoveItemException cannotRemoveItemException) {
+                    JOptionPane.showMessageDialog(null, "Sorry, cannot reset character!",
+                            "Reset Error", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+
+        btn.setPreferredSize(new Dimension(200,80));
+        btn.setFont(btn.getFont().deriveFont(20f));
+        return btn;
+    }
+
+    // MODIFIES: summary tab
+    // EFFECTS: reloads summary tab to update character's equipment and total stats
+    private void refreshSummary() {
+        JTabbedPane tabBar = getController().getTabBar();
+        tabBar.remove(CombatantCreatorGUI.SUMMARY_TAB_INDEX);
+        tabBar.add(new SummaryTab(getController()));
+        tabBar.setTitleAt(CombatantCreatorGUI.SUMMARY_TAB_INDEX, "Character Summary");
+        tabBar.revalidate();
+        tabBar.repaint();
+        tabBar.setSelectedIndex(CombatantCreatorGUI.SUMMARY_TAB_INDEX);
+    }
+
+    // MODIFIES: this
     // EFFECTS: makes finish button which confirms that user wants to finish then if so, displays finish popup dialog
     //          and exits application
     public JButton makeFinishButton() {
         JButton btn = new JButton("Finish Game");
         btn.addActionListener(e -> {
-            int input = JOptionPane.showConfirmDialog(null, "Are you sure you're done?");
+            int input = JOptionPane.showOptionDialog(null, "Are you sure you're done?",
+                    "Finish?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null, null, null);
             if (input == 0) {
                 getController().playSound("finish.wav");
                 UIManager.put("OptionPane.okButtonText", "Finish");
                 JOptionPane.showMessageDialog(null,
-                        character.getCharName() + " is ready for battle!");
+                        character.getCharName() + " is ready for battle!", "Character Complete!",
+                        JOptionPane.INFORMATION_MESSAGE);
                 System.exit(0);
             }
         });

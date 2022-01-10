@@ -19,14 +19,18 @@ public class SpellListTest {
         assertEquals(testSpellList.getSpell1(), testSpellList.selectItem(1));
         assertEquals(testSpellList.getSpell2(), testSpellList.selectItem(2));
         assertEquals(testSpellList.getSpell3(), testSpellList.selectItem(3));
+        assertEquals(testSpellList.getSpell4(), testSpellList.selectItem(4));
+        assertEquals(testSpellList.getSpell5(), testSpellList.selectItem(5));
     }
 
     @Test
     public void testArrangeByHighestSpellDamage() {
         testSpellList.arrangeByHighestSpellDamage();
         assertEquals(testSpellList.getSpell3(), testSpellList.selectItem(1));
-        assertEquals(testSpellList.getSpell1(), testSpellList.selectItem(2));
-        assertEquals(testSpellList.getSpell2(), testSpellList.selectItem(3));
+        assertEquals(testSpellList.getSpell4(), testSpellList.selectItem(2));
+        assertEquals(testSpellList.getSpell1(), testSpellList.selectItem(3));
+        assertEquals(testSpellList.getSpell2(), testSpellList.selectItem(4));
+        assertEquals(testSpellList.getSpell5(), testSpellList.selectItem(5));
     }
 
     @Test
@@ -36,5 +40,7 @@ public class SpellListTest {
         assertEquals(testSpellList.getSpell1(), testSpellList.selectItem(1));
         assertEquals(testSpellList.getSpell2(), testSpellList.selectItem(2));
         assertEquals(testSpellList.getSpell3(), testSpellList.selectItem(3));
+        assertEquals(testSpellList.getSpell4(), testSpellList.selectItem(4));
+        assertEquals(testSpellList.getSpell5(), testSpellList.selectItem(5));
     }
 }

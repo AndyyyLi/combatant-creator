@@ -19,7 +19,7 @@ public class ArmourTest {
 
     @BeforeEach
     public void setUp() {
-        testArmour = new Armour(name, description, health, energy, weapDmg, spellDmg, defense, speed);
+        testArmour = new Armour(name, description, health, energy, weapDmg, spellDmg, defense, speed, null);
     }
 
     @Test

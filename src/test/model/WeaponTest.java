@@ -19,7 +19,7 @@ public class WeaponTest {
 
     @BeforeEach
     public void setUp() {
-        testWeapon = new Weapon(name, description, health, energy, weapDmg, spellDmg, defense, speed);
+        testWeapon = new Weapon(name, description, health, energy, weapDmg, spellDmg, defense, speed, null);
     }
 
     @Test

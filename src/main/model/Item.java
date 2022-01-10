@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.*;
+
 /**
  * Item superclass covers all essential information that every type of item must have, including name, a short
  * description, and stat changes that the item gives if equipped.
@@ -15,11 +17,12 @@ public class Item {
     private int itemSpellDamage;
     private int itemDefense;
     private int itemSpeed;
+    private ImageIcon itemImg;
 
     private int extremifyCount;
 
     public Item(String name, String description, int health, int energy, int weaponDamage, int spellDamage,
-                int defense, int speed) {
+                int defense, int speed, ImageIcon img) {
         itemName = name;
         itemDescription = description;
         itemHealth = health;
@@ -28,6 +31,7 @@ public class Item {
         itemSpellDamage = spellDamage;
         itemDefense = defense;
         itemSpeed = speed;
+        itemImg = img;
         extremifyCount = 0;
     }
 
@@ -68,6 +72,9 @@ public class Item {
         return extremifyCount;
     }
 
+    public ImageIcon getItemIcon() {
+        return itemImg;
+    }
 
     // REQUIRES: item cannot be equipped
     // MODIFIES: this

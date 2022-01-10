@@ -98,7 +98,9 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         equipButton = makeEquipButton();
         removeButton = makeRemoveButton();
 
-        JPanel buttonRow = formatButtonRow(infoButton);
+        JPanel buttonRow = new JPanel();
+        buttonRow.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
+        buttonRow.add(formatButtonRow(infoButton));
         buttonRow.add(formatButtonRow(equipButton));
         buttonRow.add(formatButtonRow(removeButton));
 
@@ -123,7 +125,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
 
             for (Item i : itemList) {
                 if (i.getName().equals(itemName)) {
-                    displayInfo(i);
+                    displayInfo(i, 1);
                     break;
                 }
             }
@@ -133,16 +135,83 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
 
     // MODIFIES: this
     // EFFECTS: creates popup dialog showing item's information
-    public void displayInfo(Item item) {
-        getController().playSound("info.wav");
-        JOptionPane.showMessageDialog(null,
-                "Name: " + item.getName() + "\nDescription: " + item.getDescription()
-                        + "\nStat Changes\nHealth: " + item.getItemHealth()
-                        + "\nEnergy: " + item.getItemEnergy()
-                        + "\nWeapon Damage: " + item.getItemWeaponDamage()
-                        + "\nSpell Damage: " + item.getItemSpellDamage()
-                        + "\nDefense: " + item.getItemDefense()
-                        + "\nSpeed: " + item.getItemSpeed(), "Item Info", JOptionPane.PLAIN_MESSAGE);
+    public void displayInfo(Item item, int audio) {
+        if (audio == 1) {
+            getController().playSound("info.wav");
+        } else if (audio == 2) {
+            getController().playSound("extremify.wav");
+        } else if (audio == 3) {
+            getController().playSound("revert.wav");
+        }
+
+        Object[] options = {"Extremify item!", "Revert item"};
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(1,2));
+        panel.add(new JLabel(item.getItemIcon()));
+        String stats = "<html>Name: " + item.getName()
+                + "<br>Description: " + item.getDescription()
+                + "<br>Health: " + item.getItemHealth()
+                + "<br>Energy: " + item.getItemEnergy()
+                + "<br>Weapon Damage: " + item.getItemWeaponDamage()
+                + "<br>Spell Damage: " + item.getItemSpellDamage()
+                + "<br>Defense: " + item.getItemDefense()
+                + "<br>Speed: " + item.getItemSpeed()
+                + "<br>Extremify Count: " + item.getExtremifyCount() + "</html>";
+        JLabel statsLabel = new JLabel(stats);
+        statsLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+        panel.add(statsLabel);
+//        int input = JOptionPane.showOptionDialog(null,
+//                "Name: " + item.getName() + "\nDescription: " + item.getDescription()
+//                        + "\nStat Changes\nHealth: " + item.getItemHealth()
+//                        + "\nEnergy: " + item.getItemEnergy()
+//                        + "\nWeapon Damage: " + item.getItemWeaponDamage()
+//                        + "\nSpell Damage: " + item.getItemSpellDamage()
+//                        + "\nDefense: " + item.getItemDefense()
+//                        + "\nSpeed: " + item.getItemSpeed()
+//                        + "\nExtremify Count: " + item.getExtremifyCount(), "Item Info",
+//                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        int input = JOptionPane.showOptionDialog(null, panel, "Item Info",
+            JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        if (input == 0) {
+            if (isEquipped(item)) {
+                JOptionPane.showMessageDialog(null, "Item is equipped, cannot extremify!",
+                        "Extremify Error", JOptionPane.WARNING_MESSAGE);
+                displayInfo(item, 0);
+            } else if (item.getExtremifyCount() == 3) {
+                JOptionPane.showMessageDialog(null, "Extremify count cannot be over 3!",
+                        "Extremify Error", JOptionPane.WARNING_MESSAGE);
+                displayInfo(item, 0);
+            } else {
+                item.extremifyItem();
+                displayInfo(item, 2);
+            }
+        } else if (input == 1) {
+            if (isEquipped(item)) {
+                JOptionPane.showMessageDialog(null, "Item is equipped, cannot revert!",
+                        "Revert Error", JOptionPane.WARNING_MESSAGE);
+                displayInfo(item, 0);
+            } else if (item.getExtremifyCount() == 0) {
+                JOptionPane.showMessageDialog(null, "Extremify count is zero, cannot revert!",
+                        "Revert Error", JOptionPane.WARNING_MESSAGE);
+                displayInfo(item, 0);
+            } else {
+                item.revertItem();
+                displayInfo(item, 3);
+            }
+        }
+    }
+
+    public boolean isEquipped(Item item) {
+        if (item instanceof Weapon) {
+            if (character.getCurrentWeapon() == null) return false;
+            return character.getCurrentWeapon().getName().equals(item.getName());
+        } else if (item instanceof Spell) {
+            if (character.getCurrentSpell() == null) return false;
+            return character.getCurrentSpell().getName().equals(item.getName());
+        } else {
+            if (character.getCurrentArmour() == null) return false;
+            return character.getCurrentArmour().getName().equals(item.getName());
+        }
     }
 
     // MODIFIES: this
@@ -153,7 +222,6 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
             int index = list.getSelectedIndex();
             Object item = listModel.get(index);
             String itemName = (String) item;
-
             for (Item i : itemList) {
                 if (i.getName().equals(itemName)) {
                     if (i instanceof Weapon) {
@@ -188,15 +256,280 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
     // EFFECTS: equip item onto character if possible, else show equip error dialog
     public void equipItem(Item item) {
         if (character.canEquipItem(item)) {
-            character.equipItem(item);
-            refreshSummary();
-            getController().playSound("equip.wav");
-            JOptionPane.showMessageDialog(null, item.getName() + " has been equipped!");
+            boolean toEquip = customizeItem(item);
+            if (toEquip) {
+                character.equipItem(item);
+                refreshSummary();
+                getController().playSound("equip.wav");
+                JOptionPane.showMessageDialog(null, item.getName() + " has been equipped!");
+            }
         } else {
             JOptionPane.showMessageDialog(null,
                     item.getName() + "'s stats are not compatible with character's current stats.",
                     "Equip Error", JOptionPane.WARNING_MESSAGE);
         }
+    }
+
+    // MODIFIES: item
+    // EFFECTS: appropriately modifies item depending on item type
+    public boolean customizeItem(Item item) {
+        if (item instanceof Weapon) {
+            // pick hit effect and intensity
+            return customizeWeapon((Weapon) item);
+        } else if (item instanceof Spell) {
+            // pick element
+            return customizeSpell((Spell) item);
+        } else {
+            // pick material and defensive ability
+            return customizeArmour((Armour) item);
+        }
+    }
+
+    // MODIFIES: weapon
+    // EFFECTS: prompts user to select hit effect and intensity
+    private boolean customizeWeapon(Weapon weapon) {
+        JRadioButton none = new JRadioButton("No Effect");
+        JRadioButton stun = new JRadioButton("Stun");
+        JRadioButton arBr = new JRadioButton("Armour Break");
+        JRadioButton pierce = new JRadioButton("Pierce");
+        JRadioButton multi = new JRadioButton("Multihit");
+
+        ButtonGroup hitFx = new ButtonGroup();
+        hitFx.add(none);
+        hitFx.add(stun);
+        hitFx.add(arBr);
+        hitFx.add(pierce);
+        hitFx.add(multi);
+
+        JPanel btnPanel = new JPanel();
+        btnPanel.add(none);
+        btnPanel.add(stun);
+        btnPanel.add(arBr);
+        btnPanel.add(pierce);
+        btnPanel.add(multi);
+
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayout(2,1));
+        panel1.add(new JLabel("Select a hit effect:"));
+        panel1.add(btnPanel);
+
+//        JOptionPane.showMessageDialog(null, panel1, "Hit Effect",
+//                JOptionPane.INFORMATION_MESSAGE);
+
+        int input1 = JOptionPane.showOptionDialog(null, panel1, "Hit Effect",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] {"Select"},
+                JOptionPane.OK_OPTION);
+
+        String effect;
+        if (input1 != JOptionPane.CLOSED_OPTION) {
+            if (none.isSelected()) {
+                weapon.applyHitEffect("No Effect");
+                weapon.setEffectIntensity(0);
+                return true;
+            } else if (stun.isSelected()) {
+                weapon.applyHitEffect("Stun");
+                effect = "the stun duration in seconds";
+            } else if (arBr.isSelected()) {
+                weapon.applyHitEffect("Armour Break");
+                effect = "the amount of armour broken (1 = 10%, 5 = 50%)";
+            } else if (pierce.isSelected()) {
+                weapon.applyHitEffect("Pierce");
+                effect = "the number of enemies it can pierce through";
+            } else if (multi.isSelected()) {
+                weapon.applyHitEffect("Multihit");
+                effect = "the number of additional enemies that can be hit at once";
+            } else {
+                JOptionPane.showMessageDialog(null, "Nothing Selected!", "Equip Error",
+                        JOptionPane.WARNING_MESSAGE);
+                return customizeWeapon(weapon);
+            }
+        } else {
+            return false;
+        }
+
+
+        JSlider slider = createSlider();
+
+        String info = "<html>Select " + weapon.getHitEffect() + "'s intensity level.<br>Each level indicates " + effect +
+                ",<br>but the chances of it occurring decrease as the level increases.</html>";
+        JPanel txtPanel = new JPanel();
+        txtPanel.add(new JLabel(info));
+
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayout(2,1));
+        panel2.add(txtPanel);
+        panel2.add(slider);
+
+        int input2 = JOptionPane.showOptionDialog(null, panel2, "Effect Intensity",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+        if (input2 == JOptionPane.OK_OPTION) {
+            weapon.setEffectIntensity(slider.getValue());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // private helper for customizeWeapon's effect intensity slider
+    private JSlider createSlider() {
+        JSlider slider = new JSlider(1,5);
+        slider.setMajorTickSpacing(1);
+        slider.setPaintLabels(true);
+        slider.setPaintTicks(true);
+        slider.setValue(3);
+        return slider;
+    }
+
+    // MODIFIES: spell
+    // EFFECTS: prompts user to select an element
+    private boolean customizeSpell(Spell spell) {
+        JRadioButton normal = new JRadioButton("Normal");
+        JRadioButton fire = new JRadioButton("Fire");
+        JRadioButton water = new JRadioButton("Water");
+        JRadioButton ground = new JRadioButton("Ground");
+
+        ButtonGroup elements = new ButtonGroup();
+        elements.add(normal);
+        elements.add(fire);
+        elements.add(water);
+        elements.add(ground);
+
+        JPanel btnPanel = new JPanel();
+        btnPanel.add(normal);
+        btnPanel.add(fire);
+        btnPanel.add(water);
+        btnPanel.add(ground);
+
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayout(2,1));
+        panel1.add(new JLabel("Select an element:"));
+        panel1.add(btnPanel);
+
+//        JOptionPane.showMessageDialog(null, panel1, "Spell Element",
+//                JOptionPane.INFORMATION_MESSAGE);
+
+        int input = JOptionPane.showOptionDialog(null, panel1, "Spell Element",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] {"Select"},
+                JOptionPane.OK_OPTION);
+
+        if (input != JOptionPane.CLOSED_OPTION) {
+            if (normal.isSelected()) {
+                spell.pickElement("Normal");
+            } else if (fire.isSelected()) {
+                spell.pickElement("Fire");
+            } else if (water.isSelected()) {
+                spell.pickElement("Water");
+            } else if (ground.isSelected()) {
+                spell.pickElement("Ground");
+            } else {
+                JOptionPane.showMessageDialog(null, "Nothing selected, defaulting to Normal!",
+                        "Default Selected", JOptionPane.INFORMATION_MESSAGE);
+                spell.pickElement("Normal");
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    // MODIFIES: armour
+    // EFFECTS: prompts user to select armour material and defensive ability
+    private boolean customizeArmour(Armour armour) {
+        JRadioButton steel = new JRadioButton("Super Steel");
+        JRadioButton diamond = new JRadioButton("Ice Diamond");
+        JRadioButton obsidian = new JRadioButton("Magma Obsidian");
+
+        ButtonGroup materials = new ButtonGroup();
+        materials.add(steel);
+        materials.add(diamond);
+        materials.add(obsidian);
+
+        JPanel btnPanel = new JPanel();
+        btnPanel.add(steel);
+        btnPanel.add(diamond);
+        btnPanel.add(obsidian);
+
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayout(2,1));
+        panel1.add(new JLabel("Select armour material:"));
+        panel1.add(btnPanel);
+
+//        JOptionPane.showMessageDialog(null, panel1, "Armour Material",
+//                JOptionPane.INFORMATION_MESSAGE);
+
+        int input1 = JOptionPane.showOptionDialog(null, panel1, "Armour Material",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] {"Select"},
+                JOptionPane.OK_OPTION);
+
+        if (input1 != JOptionPane.CLOSED_OPTION) {
+            if (steel.isSelected()) {
+                armour.changeMaterial("Super Steel");
+            } else if (diamond.isSelected()) {
+                armour.changeMaterial("Ice Diamond");
+            } else if (obsidian.isSelected()) {
+                armour.changeMaterial("Magma Obsidian");
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Nothing selected, defaulting to Super Steel!", "Default Selected",
+                        JOptionPane.INFORMATION_MESSAGE);
+                armour.changeMaterial("Super Steel");
+            }
+        } else {
+            return false;
+        }
+
+        JRadioButton none = new JRadioButton("None");
+        JRadioButton regen = new JRadioButton("Rapid Regen - Briefly and quickly heal");
+        JRadioButton shock = new JRadioButton("Shockback - Paralyze and disarm attackers");
+        JRadioButton rush = new JRadioButton("Nimble Rush - Gain a burst of speed and dodge attacks");
+
+        ButtonGroup abilities = new ButtonGroup();
+        abilities.add(none);
+        abilities.add(regen);
+        abilities.add(shock);
+        abilities.add(rush);
+
+        JPanel btnPanel2 = new JPanel();
+        btnPanel2.setLayout(new GridLayout(4,1));
+        btnPanel2.add(none);
+        btnPanel2.add(regen);
+        btnPanel2.add(shock);
+        btnPanel2.add(rush);
+
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayout(2,1));
+        panel2.add(new JLabel("Select your armour's defensive ability, " +
+                "which occasionally triggers upon being hit:"));
+        panel2.add(btnPanel2);
+
+//        JOptionPane.showMessageDialog(null, panel2, "Defensive Ability",
+//                JOptionPane.INFORMATION_MESSAGE);
+
+        int input2 = JOptionPane.showOptionDialog(null, panel2, "Defensive Ability",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] {"Select"},
+                JOptionPane.OK_OPTION);
+
+        if (input2 != JOptionPane.CLOSED_OPTION) {
+            if (none.isSelected()) {
+                armour.changeDefensiveAbility("None");
+            } else if (regen.isSelected()) {
+                armour.changeDefensiveAbility("Rapid Regen");
+            } else if (shock.isSelected()) {
+                armour.changeDefensiveAbility("Shockback");
+            } else if (rush.isSelected()) {
+                armour.changeDefensiveAbility("Nimble Rush");
+            } else {
+                JOptionPane.showMessageDialog(null, "Nothing selected, defaulting to None!",
+                        "Default Selected", JOptionPane.INFORMATION_MESSAGE);
+                armour.changeDefensiveAbility("None");
+            }
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
     // MODIFIES: this
@@ -221,13 +554,18 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
     // EFFECTS: compares character's equipped item with given item, removes only if they are the same,
     //          else show error popup message
     public void tryToRemove(Item item) {
-        try {
-            character.removeItem(item);
-            refreshSummary();
-            getController().playSound("remove.wav");
-            JOptionPane.showMessageDialog(null, item.getName() + " has been removed!");
-        } catch (CannotRemoveItemException e) {
-            JOptionPane.showMessageDialog(null, item.getName() + " is not equipped!",
+        if (character.canRemove(item)) {
+            try {
+                character.removeItem(item);
+                refreshSummary();
+                getController().playSound("remove.wav");
+                JOptionPane.showMessageDialog(null, item.getName() + " has been removed!");
+            } catch (CannotRemoveItemException e) {
+                JOptionPane.showMessageDialog(null, item.getName() + " is not equipped!",
+                        "Remove Error", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Cannot remove; stats will turn negative!",
                     "Remove Error", JOptionPane.WARNING_MESSAGE);
         }
     }
@@ -243,7 +581,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
 
     // MODIFIES: summary tab
     // EFFECTS: reloads summary tab to update character's equipment and total stats
-    public void refreshSummary() {
+    private void refreshSummary() {
         JTabbedPane tabBar = getController().getTabBar();
         tabBar.remove(CombatantCreatorGUI.SUMMARY_TAB_INDEX);
         tabBar.add(new SummaryTab(getController()));

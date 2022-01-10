@@ -19,14 +19,18 @@ public class WeaponListTest {
         assertEquals(testWeaponList.getWeapon1(), testWeaponList.selectItem(1));
         assertEquals(testWeaponList.getWeapon2(), testWeaponList.selectItem(2));
         assertEquals(testWeaponList.getWeapon3(), testWeaponList.selectItem(3));
+        assertEquals(testWeaponList.getWeapon4(), testWeaponList.selectItem(4));
+        assertEquals(testWeaponList.getWeapon5(), testWeaponList.selectItem(5));
     }
 
     @Test
     public void testArrangeByHighestWeaponDamage() {
         testWeaponList.arrangeByHighestWeaponDamage();
-        assertEquals(testWeaponList.getWeapon1(), testWeaponList.selectItem(1));
-        assertEquals(testWeaponList.getWeapon3(), testWeaponList.selectItem(2));
-        assertEquals(testWeaponList.getWeapon2(), testWeaponList.selectItem(3));
+        assertEquals(testWeaponList.getWeapon4(), testWeaponList.selectItem(1));
+        assertEquals(testWeaponList.getWeapon1(), testWeaponList.selectItem(2));
+        assertEquals(testWeaponList.getWeapon5(), testWeaponList.selectItem(3));
+        assertEquals(testWeaponList.getWeapon3(), testWeaponList.selectItem(4));
+        assertEquals(testWeaponList.getWeapon2(), testWeaponList.selectItem(5));
     }
 
     @Test
@@ -36,5 +40,7 @@ public class WeaponListTest {
         assertEquals(testWeaponList.getWeapon1(), testWeaponList.selectItem(1));
         assertEquals(testWeaponList.getWeapon2(), testWeaponList.selectItem(2));
         assertEquals(testWeaponList.getWeapon3(), testWeaponList.selectItem(3));
+        assertEquals(testWeaponList.getWeapon4(), testWeaponList.selectItem(4));
+        assertEquals(testWeaponList.getWeapon5(), testWeaponList.selectItem(5));
     }
 }

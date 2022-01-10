@@ -19,7 +19,7 @@ import java.io.IOException;
  * Combatant Creator Graphic User Interface
  */
 public class CombatantCreatorGUI extends JFrame {
-    public static final int WIDTH = 900;
+    public static final int WIDTH = 1200;
     public static final int HEIGHT = 800;
     public static final int WEAPONS_TAB_INDEX = 0;
     public static final int SPELLS_TAB_INDEX = 1;
@@ -108,6 +108,8 @@ public class CombatantCreatorGUI extends JFrame {
                         "Saved character has no name! Creating new character...",
                         "Load Error", JOptionPane.WARNING_MESSAGE);
             }
+        } else if (selection == JOptionPane.CLOSED_OPTION) {
+            System.exit(0);
         }
         playSound("select.wav");
     }

@@ -149,6 +149,18 @@ public class Character implements Savable {
         this.totalSpeed -= item.getItemSpeed();
     }
 
+    // EFFECTS: returns true if removing item maintains all non-negative stats, false otherwise
+    public boolean canRemove(Item item) {
+        boolean healthOK = this.totalHealth - item.getItemHealth() > 0;
+        boolean energyOK = this.totalEnergy - item.getItemEnergy() >= 0;
+        boolean weapDmgOK = this.totalWeaponDamage - item.getItemWeaponDamage() >= 0;
+        boolean spellDmgOK = this.totalSpellDamage - item.getItemSpellDamage() >= 0;
+        boolean defenseOK = this.totalDefense - item.getItemDefense() >= 0;
+        boolean speedOK = this.totalSpeed - item.getItemSpeed() > 0;
+
+        return healthOK && energyOK && weapDmgOK && spellDmgOK && defenseOK && speedOK;
+    }
+
     // MODIFIES: this
     // EFFECTS: if given item is equipped, remove the item from character, else throw exception
     public void tryToRemove(Item item) throws CannotRemoveItemException {

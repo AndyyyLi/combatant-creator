@@ -19,6 +19,8 @@ public class ArmourListTest {
         assertEquals(testArmourList.getArmour1(), testArmourList.selectItem(1));
         assertEquals(testArmourList.getArmour2(), testArmourList.selectItem(2));
         assertEquals(testArmourList.getArmour3(), testArmourList.selectItem(3));
+        assertEquals(testArmourList.getArmour4(), testArmourList.selectItem(4));
+        assertEquals(testArmourList.getArmour5(), testArmourList.selectItem(5));
     }
 
     @Test
@@ -26,7 +28,9 @@ public class ArmourListTest {
         testArmourList.arrangeByHighestDefense();
         assertEquals(testArmourList.getArmour2(), testArmourList.selectItem(1));
         assertEquals(testArmourList.getArmour1(), testArmourList.selectItem(2));
-        assertEquals(testArmourList.getArmour3(), testArmourList.selectItem(3));
+        assertEquals(testArmourList.getArmour5(), testArmourList.selectItem(3));
+        assertEquals(testArmourList.getArmour4(), testArmourList.selectItem(4));
+        assertEquals(testArmourList.getArmour3(), testArmourList.selectItem(5));
     }
 
     @Test
@@ -36,5 +40,7 @@ public class ArmourListTest {
         assertEquals(testArmourList.getArmour1(), testArmourList.selectItem(1));
         assertEquals(testArmourList.getArmour2(), testArmourList.selectItem(2));
         assertEquals(testArmourList.getArmour3(), testArmourList.selectItem(3));
+        assertEquals(testArmourList.getArmour4(), testArmourList.selectItem(4));
+        assertEquals(testArmourList.getArmour5(), testArmourList.selectItem(5));
     }
 }

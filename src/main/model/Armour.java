@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.*;
+
 /**
  * Armour is a type of Item which mainly provides stat changes to health, defense, and speed, and also include
  * exclusive options to choose the armour's material and defensive ability when attacked
@@ -14,10 +16,12 @@ public class Armour extends Item {
     private String defensiveAbility;
 
     public Armour(String name, String description, int health, int energy, int weaponDamage, int spellDamage,
-                  int defense, int speed) {
-        super(name, description, health, energy, weaponDamage, spellDamage, defense, speed);
+                  int defense, int speed, ImageIcon img) {
+
+        super(name, description, health, energy, weaponDamage, spellDamage, defense, speed, img);
         material = "Super Steel";
         defensiveAbility = "None";
+
     }
 
     // GETTER METHODS
