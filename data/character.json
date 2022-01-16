@@ -1,6 +1,14 @@
 {
-  "weapon": "None",
-  "spell": "None",
-  "name": "Bobberino",
-  "armour": "None"
+  "armourMaterial": "Ice Diamond",
+  "weapon": "Sword of the Void",
+  "spell": "Brawler's Spell",
+  "weaponEffect": "Multihit",
+  "name": "Chipmunk",
+  "armourAdjust": 0,
+  "spellElement": "Fire",
+  "armourAbility": "Rapid Regen",
+  "weaponAdjust": 0,
+  "spellAdjust": 0,
+  "weaponIntensity": 2,
+  "armour": "Fairy-Sparkling Plate"
 }

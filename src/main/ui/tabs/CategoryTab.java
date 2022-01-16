@@ -201,6 +201,7 @@ public abstract class CategoryTab extends JPanel implements ListSelectionListene
         }
     }
 
+    // EFFECTS: returns true if item is equipped on character, else return false
     public boolean isEquipped(Item item) {
         if (item instanceof Weapon) {
             if (character.getCurrentWeapon() == null) return false;
