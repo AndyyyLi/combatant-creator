@@ -22,7 +22,7 @@ public class WeaponList extends Category {
             "A trusty crossbow to take down opponents from afar and a must-have for spell-lovers!",
             0,80,75,0,0,30,
             new ImageIcon("./imgs/weapons/crossbow.png"));
-    private Weapon weapon3 = new Weapon("Trinity Gauntlet",
+    private Weapon weapon3 = new Weapon("Trinity Gauntlets",
             "Get up in their face and pack a punch that they won't forget...if they're still alive.",
             95,0,120,0,45,60,
             new ImageIcon("./imgs/weapons/gauntlet.png"));
